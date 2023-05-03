@@ -1,6 +1,6 @@
-const ServicesList = () => {
+const ServicesList = ({ openModal }) => {
   return (
-    <div>
+    <>
       <table className="w-full text-center border-collapse">
         <thead className="">
           <tr className="border-b border-gray-700 h-14">
@@ -32,19 +32,15 @@ const ServicesList = () => {
           </tr>
         </tbody>
       </table>
-      <div className="flex w-80 text-sm justify-between md:w-1/2 m-auto mt-10">
-        <div>
-          <button className="flex ml-auto text-white bg-blue-500 border-0 py-2 px-6 focus:outline-none hover:bg-blue-600 rounded">
-            BACK
-          </button>
-        </div>
-        <div>
-          <button className="flex ml-auto text-white bg-blue-500 border-0 py-2 px-6 focus:outline-none hover:bg-blue-600 rounded">
-            ADD SERVICES
-          </button>
-        </div>
+      <div className=" w-80 text-sm ml-auto mt-10">
+        <button
+          onClick={openModal}
+          className=" ml-auto text-white bg-blue-500 border-0 py-2 px-6 focus:outline-none hover:bg-blue-600 rounded"
+        >
+          ADD SERVICES
+        </button>
       </div>
-    </div>
+    </>
   );
 };
 

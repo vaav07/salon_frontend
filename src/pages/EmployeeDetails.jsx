@@ -6,6 +6,7 @@ import ViewDetails from "../components/ViewDetails";
 
 const EmployeeDetails = () => {
   let [isOpen, setIsOpen] = useState(false);
+  const [viewModal, setViewModal] = useState(false);
 
   function closeModal() {
     setIsOpen(false);
@@ -21,12 +22,21 @@ const EmployeeDetails = () => {
 
         <div className=" max-w-5xl m-auto">
           <h1 className="py-6 text-2xl font-bold">EMPLOYEE DETAILS</h1>
-          <ListDetails openModal={openModal} />
+          <ListDetails openModal={openModal} setViewModal={setViewModal} />
         </div>
       </div>
 
-      <FormModal closeModal={closeModal} isOpen={isOpen} header="Employee" />
-      <ViewDetails closeModal={closeModal} isOpen={isOpen} />
+      {viewModal && (
+        <ViewDetails
+          closeModal={closeModal}
+          isOpen={isOpen}
+          setViewModal={setViewModal}
+          header="Employee"
+        />
+      )}
+      {!viewModal && (
+        <FormModal closeModal={closeModal} isOpen={isOpen} header="Employee" />
+      )}
     </>
   );
 };

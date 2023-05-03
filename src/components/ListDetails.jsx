@@ -1,4 +1,8 @@
-const ListDetails = ({ openModal }) => {
+const ListDetails = ({ openModal, setViewModal }) => {
+  const viewM = () => {
+    setViewModal(true);
+    openModal();
+  };
   return (
     <div className="bg-gradient-to-r from-green-400 to-blue-500 rounded-lg p-4">
       <table className="w-full text-center border-collapse">
@@ -20,7 +24,7 @@ const ListDetails = ({ openModal }) => {
             <td>
               Male{" "}
               <button
-                onClick={openModal}
+                onClick={viewM}
                 className="border border-black px-1 text-sm hover:bg-gray-700"
               >
                 view

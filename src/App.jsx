@@ -26,11 +26,11 @@ function App() {
         <Route path="/customer" element={<CustomerDetails />} />
         <Route path="/services" element={<Services />} />
         <Route path="/employee" element={<EmployeeDetails />} />
+        <Route path="/sales" element={<Sales />} />
 
         <Route element={<AuthLayout />}>
           {/* <Sidebar /> */}
 
-          <Route path="/sales" element={<Sales />} />
           <Route path="/settings" element={<Settings />} />
         </Route>
       </Routes>
