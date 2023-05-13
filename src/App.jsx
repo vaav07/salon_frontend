@@ -9,8 +9,11 @@ import EmployeeDetails from "./pages/EmployeeDetails";
 import Reports from "./pages/Reports";
 import Sales from "./pages/Sales";
 import Services from "./pages/Services";
-import Settings from "./pages/Settings";
+// import Settings from "./pages/Settings";
 import AuthLayout from "./layouts/AuthLayout";
+import AdminPage from "./pages/Admin/AdminPage";
+import AdminDashboard from "./pages/Admin/AdminDashboard";
+import AdminAuthLayout from "./layouts/AdminAuthLayout";
 
 function App() {
   return (
@@ -20,18 +23,24 @@ function App() {
 
       <Routes>
         <Route path="/login" element={<Login />} />
+        {/* Admin Login */}
+        <Route path="/admin" element={<AdminPage />} />
 
-        <Route path="/reports" element={<Reports />} />
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/customer" element={<CustomerDetails />} />
-        <Route path="/services" element={<Services />} />
-        <Route path="/employee" element={<EmployeeDetails />} />
-        <Route path="/sales" element={<Sales />} />
+        {/* Admin Routes */}
+        <Route element={<AdminAuthLayout />}>
+          <Route path="/adminDash" element={<AdminDashboard />} />
+        </Route>
 
         <Route element={<AuthLayout />}>
           {/* <Sidebar /> */}
+          <Route path="/reports" element={<Reports />} />
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/customer" element={<CustomerDetails />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/employee" element={<EmployeeDetails />} />
+          <Route path="/sales" element={<Sales />} />
 
-          <Route path="/settings" element={<Settings />} />
+          {/* <Route path="/settings" element={<Settings />} /> */}
         </Route>
       </Routes>
     </>

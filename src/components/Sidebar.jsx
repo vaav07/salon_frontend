@@ -97,12 +97,12 @@ const Sidebar = () => {
               </Link>
             </li>
 
-            <li className="nav-text">
+            {/* <li className="nav-text">
               <Link to="/settings">
                 <AiIcons.AiOutlineSetting />
                 <span>Settings</span>
               </Link>
-            </li>
+            </li> */}
 
             <li className="nav-text">
               <button className="logout-btn" onClick={logout}>

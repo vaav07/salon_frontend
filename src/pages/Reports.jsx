@@ -1,4 +1,6 @@
-import ReportsList from "../components/ReportsList";
+import RadioButtons from "../components/RadioButtons";
+import ReportList from "../components/ReportList";
+// import ReportsList from "../components/ReportsList";
 import Sidebar from "../components/Sidebar";
 
 const Reports = () => {
@@ -8,13 +10,18 @@ const Reports = () => {
         <Sidebar />
 
         <div className=" max-w-5xl m-auto">
-          <h1 className="py-6 text-2xl font-bold">Reports</h1>
-          <div className="flex flex-col md:flex-row md:flex-wrap ">
+          <h1 className="pt-6 text-2xl font-bold">Reports</h1>
+
+          <RadioButtons />
+
+          <ReportList />
+
+          {/* <div className="flex flex-col md:flex-row md:flex-wrap ">
             <ReportsList />
             <ReportsList />
             <ReportsList />
             <ReportsList />
-          </div>
+          </div> */}
         </div>
       </div>
     </>
