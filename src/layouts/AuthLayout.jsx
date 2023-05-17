@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom";
 import useAuthContext from "../context/AuthContext";
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 
 const AuthLayout = () => {
   const { user } = useAuthContext();

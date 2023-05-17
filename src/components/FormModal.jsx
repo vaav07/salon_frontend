@@ -1,8 +1,35 @@
 /* eslint-disable react/prop-types */
 import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
+import { useForm } from "react-hook-form";
+import { DevTool } from "@hookform/devtools";
+import useAuthContext from "../context/AuthContext";
+
 const FormModal = ({ isOpen, closeModal, header }) => {
   //   console.log("MOdal", isOpenF);
+  const { http, user, token } = useAuthContext();
+
+  const storedData = JSON.parse(user);
+
+  const form = useForm({
+    defaultValues: {
+      admin_id: storedData.admin_id,
+      user_id: storedData.id,
+    },
+  });
+
+  const { register, control, handleSubmit, formState } = form;
+  const { errors } = formState;
+
+  const onSubmit = (data) => {
+    console.log("form submitted", data);
+    http.post(`/api/addcustomer`, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  };
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
@@ -37,26 +64,34 @@ const FormModal = ({ isOpen, closeModal, header }) => {
                   >
                     {header} Details
                   </Dialog.Title>
-                  <div className="mt-2">
-                    <form action="">
+                  <div className="mt-1">
+                    <form onSubmit={handleSubmit(onSubmit)} noValidate>
                       <div className="border-b border-gray-900/10 pb-4">
-                        <div className="mt-2 grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-6">
+                        <div className="mt-1 grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-6">
                           <div className="sm:col-span-full">
                             <label
-                              htmlFor="fullname"
+                              htmlFor="customer_fullname"
                               className="block text-sm font-medium leading-6 text-gray-900"
                             >
                               Full Name
                             </label>
-                            <div className="mt-2">
+                            <div className="mt-1">
                               <input
                                 type="text"
-                                name="fullname"
-                                id="fullname"
+                                id="customer_fullname"
+                                {...register("customer_fullname", {
+                                  required: {
+                                    value: true,
+                                    message: "fullname is required",
+                                  },
+                                })}
                                 autoComplete="given-name"
                                 className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                               />
                             </div>
+                            <p className="text-xs text-red-600 ml-2 mt-1">
+                              {errors.customer_fullname?.message}
+                            </p>
                           </div>
 
                           <div className="sm:col-span-full">
@@ -66,50 +101,75 @@ const FormModal = ({ isOpen, closeModal, header }) => {
                             >
                               Email address
                             </label>
-                            <div className="mt-2">
+                            <div className="mt-1">
                               <input
                                 id="email"
-                                name="email"
+                                {...register("email", {
+                                  required: {
+                                    value: true,
+                                    message: "email is required",
+                                  },
+                                  pattern: {
+                                    value:
+                                      /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/,
+                                    message: "Invalid email format",
+                                  },
+                                })}
                                 type="email"
                                 autoComplete="email"
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                               />
                             </div>
+                            <p className="text-xs text-red-600 ml-2 mt-1">
+                              {errors.email?.message}
+                            </p>
                           </div>
 
                           <div className="sm:col-span-3">
                             <label
-                              htmlFor="phone"
+                              htmlFor="phone_no"
                               className="block text-sm font-medium leading-6 text-gray-900"
                             >
                               Phone No:
                             </label>
-                            <div className="mt-2">
+                            <div className="mt-1">
                               <input
                                 type="tel"
-                                pattern="/(7|8|9)\d{9}/"
-                                name="phone"
-                                id="phone"
-                                autoComplete="given-name"
+                                // pattern="/(7|8|9)\d{9}/"
+                                {...register("phone_no", {
+                                  required: {
+                                    value: true,
+                                    message: "phone is required",
+                                  },
+                                  // pattern: {
+                                  //   value: /(7|8|9)\d{9}/,
+                                  //   message: "Invalid Phone number",
+                                  // },
+                                })}
+                                id="phone_no"
+                                autoComplete="phone_no"
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                               />
                             </div>
+                            <p className="text-xs text-red-600 ml-2 mt-1">
+                              {errors.phone_no?.message}
+                            </p>
                           </div>
 
                           <div className="sm:col-span-3">
                             <label
-                              htmlFor="altphone"
+                              htmlFor="alt_phone_no"
                               className="block text-sm font-medium leading-6 text-gray-900"
                             >
                               Alternate Phone No:
                             </label>
-                            <div className="mt-2">
+                            <div className="mt-1">
                               <input
                                 type="tel"
                                 pattern="/(7|8|9)\d{9}/"
-                                name="altphone"
-                                id="altphone"
-                                autoComplete="family-name"
+                                {...register("alt_phone_no")}
+                                id="alt_phone_no"
+                                autoComplete="alt_phone_no"
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                               />
                             </div>
@@ -122,15 +182,23 @@ const FormModal = ({ isOpen, closeModal, header }) => {
                             >
                               Address
                             </label>
-                            <div className="mt-2">
+                            <div className="mt-1">
                               <input
                                 type="text"
-                                name="address"
+                                {...register("address", {
+                                  required: {
+                                    value: true,
+                                    message: "address is required",
+                                  },
+                                })}
                                 id="address"
                                 autoComplete="address"
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                               />
                             </div>
+                            <p className="text-xs text-red-600 ml-2 mt-1">
+                              {errors.address?.message}
+                            </p>
                           </div>
 
                           <div className="sm:col-span-2 sm:col-start-1">
@@ -140,15 +208,23 @@ const FormModal = ({ isOpen, closeModal, header }) => {
                             >
                               State
                             </label>
-                            <div className="mt-2">
+                            <div className="mt-1">
                               <input
                                 type="text"
-                                name="state"
+                                {...register("state", {
+                                  required: {
+                                    value: true,
+                                    message: "state is required",
+                                  },
+                                })}
                                 id="state"
                                 autoComplete="address-level2"
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                               />
                             </div>
+                            <p className="text-xs text-red-600 ml-2 mt-1">
+                              {errors.state?.message}
+                            </p>
                           </div>
 
                           <div className="sm:col-span-2">
@@ -158,15 +234,23 @@ const FormModal = ({ isOpen, closeModal, header }) => {
                             >
                               City
                             </label>
-                            <div className="mt-2">
+                            <div className="mt-1">
                               <input
                                 type="text"
-                                name="city"
+                                {...register("city", {
+                                  required: {
+                                    value: true,
+                                    message: "city is required",
+                                  },
+                                })}
                                 id="city"
                                 autoComplete="address-level1"
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                               />
                             </div>
+                            <p className="text-xs text-red-600 ml-2 mt-1">
+                              {errors.city?.message}
+                            </p>
                           </div>
 
                           <div className="sm:col-span-2">
@@ -176,15 +260,23 @@ const FormModal = ({ isOpen, closeModal, header }) => {
                             >
                               Pincode
                             </label>
-                            <div className="mt-2">
+                            <div className="mt-1">
                               <input
                                 type="text"
-                                name="pincode"
+                                {...register("pincode", {
+                                  required: {
+                                    value: true,
+                                    message: "pincode is required",
+                                  },
+                                })}
                                 id="pincode"
                                 autoComplete="pincode"
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                               />
                             </div>
+                            <p className="text-xs text-red-600 ml-2 mt-1">
+                              {errors.pincode?.message}
+                            </p>
                           </div>
 
                           <div className="sm:col-span-3">
@@ -194,15 +286,23 @@ const FormModal = ({ isOpen, closeModal, header }) => {
                             >
                               Birth Date:
                             </label>
-                            <div className="mt-2">
+                            <div className="mt-1">
                               <input
                                 type="date"
-                                name="dob"
+                                {...register("dob", {
+                                  required: {
+                                    value: true,
+                                    message: "dob is required",
+                                  },
+                                })}
                                 id="dob"
                                 autoComplete="dob"
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                               />
                             </div>
+                            <p className="text-xs text-red-600 ml-2 mt-1">
+                              {errors.dob?.message}
+                            </p>
                           </div>
 
                           <div className="sm:col-span-3">
@@ -212,15 +312,32 @@ const FormModal = ({ isOpen, closeModal, header }) => {
                             >
                               Gender
                             </label>
-                            <div className="mt-2">
-                              <input
+                            <div className="mt-1">
+                              <select
+                                className="block w-full rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                {...register("gender", {
+                                  required: {
+                                    value: true,
+                                    message: "gender is required",
+                                  },
+                                })}
+                              >
+                                <option value="female">female</option>
+                                <option value="male">male</option>
+                                <option value="other">other</option>
+                              </select>
+
+                              {/* <input
                                 type="text"
-                                name="gender"
+                                {...register("gender")}
                                 id="gender"
                                 autoComplete="gender"
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                              />
+                              /> */}
                             </div>
+                            <p className="text-xs text-red-600 ml-2 mt-1">
+                              {errors.gender?.message}
+                            </p>
                           </div>
 
                           {header === "Employee" ? (
@@ -231,39 +348,47 @@ const FormModal = ({ isOpen, closeModal, header }) => {
                               >
                                 Date of Joinig:
                               </label>
-                              <div className="mt-2">
+                              <div className="mt-1">
                                 <input
                                   type="date"
-                                  name="doj"
+                                  {...register("doj", {
+                                    required: {
+                                      value: false,
+                                      message: "doj is required",
+                                    },
+                                  })}
                                   id="doj"
-                                  autoComplete="dob"
+                                  autoComplete="odj"
                                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 />
                               </div>
+                              <p className="text-xs text-red-600 ml-2 mt-1">
+                                {errors.doj?.message}
+                              </p>
                             </div>
                           ) : (
                             <></>
                           )}
                         </div>
                       </div>
-                    </form>
-                  </div>
 
-                  <div className="mt-2 flex justify-between">
-                    <button
-                      type="button"
-                      className="inline-flex justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 text-sm font-medium text-red-900 hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
-                      onClick={closeModal}
-                    >
-                      Back
-                    </button>
-                    <button
-                      type="button"
-                      className="inline-flex justify-center rounded-md border border-transparent bg-green-100 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
-                      onClick={closeModal}
-                    >
-                      Add Employee
-                    </button>
+                      <div className="mt-1 flex justify-between">
+                        <button
+                          type="button"
+                          className="inline-flex justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 text-sm font-medium text-red-900 hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
+                          onClick={closeModal}
+                        >
+                          Back
+                        </button>
+                        <button
+                          type="submit"
+                          className="inline-flex justify-center rounded-md border border-transparent bg-green-100 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
+                          // onClick={closeModal}
+                        >
+                          Add {header}
+                        </button>
+                      </div>
+                    </form>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>
@@ -271,6 +396,7 @@ const FormModal = ({ isOpen, closeModal, header }) => {
           </div>
         </Dialog>
       </Transition>
+      <DevTool control={control} />
     </>
   );
 };

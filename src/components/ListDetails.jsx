@@ -1,4 +1,5 @@
-const ListDetails = ({ openModal, setViewModal }) => {
+/* eslint-disable react/prop-types */
+const ListDetails = ({ openModal, setViewModal, data, header }) => {
   const viewM = () => {
     setViewModal(true);
     openModal();
@@ -16,22 +17,29 @@ const ListDetails = ({ openModal, setViewModal }) => {
           </tr>
         </thead>
         <tbody>
-          <tr className="border-b border-red-100 h-10 hover:bg-red-300">
-            <td>1</td>
-            <td>John Cena</td>
-            <td>Malcolm Lockyer</td>
-            <td>9876543210</td>
-            <td>
-              Male{" "}
-              <button
-                onClick={viewM}
-                className="border border-black px-1 text-sm hover:bg-gray-700"
-              >
-                view
-              </button>
-            </td>
-          </tr>
-          <tr className="border-b border-red-100 h-10  hover:bg-red-300">
+          {data.map((item, index) => (
+            <tr
+              key={item.id}
+              className="border-b border-red-100 h-10 hover:bg-red-300"
+            >
+              <td>{index + 1}</td>
+              {/* need to change the name to only fullname after new migration */}
+              <td>{item.customer_fullname}</td>
+              <td>{item.email}</td>
+              <td>{item.phone_no}</td>
+              <td>
+                {item.gender}
+                <button
+                  onClick={viewM}
+                  className="border border-black px-1 text-sm hover:bg-gray-700"
+                >
+                  view
+                </button>
+              </td>
+            </tr>
+          ))}
+
+          {/* <tr className="border-b border-red-100 h-10  hover:bg-red-300">
             <td>2</td>
             <td>Witchy Woman</td>
             <td>The Eagles</td>
@@ -54,7 +62,7 @@ const ListDetails = ({ openModal, setViewModal }) => {
                 view
               </button>
             </td>
-          </tr>
+          </tr> */}
         </tbody>
       </table>
       <div className="flex w-80 text-sm justify-between md:w-1/2 m-auto mt-10">
@@ -68,7 +76,7 @@ const ListDetails = ({ openModal, setViewModal }) => {
             onClick={openModal}
             className="  rounded-lg px-3 py-1 bg-gradient-to-r  hover:from-pink-500 hover:to-yellow-500"
           >
-            ADD EMPLOYEE
+            Add {header}
           </button>
         </div>
       </div>

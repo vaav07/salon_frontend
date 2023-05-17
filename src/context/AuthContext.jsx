@@ -9,10 +9,18 @@ export const AuthProvider = ({ children }) => {
 
   const [token, setToken] = useState(sessionStorage.getItem("token"));
   const [user, setUser] = useState(sessionStorage.getItem("user"));
+  const [userId, setUserId] = useState(sessionStorage.getItem("userId"));
   const [admin, setAdmin] = useState(sessionStorage.getItem("admin"));
+  const [adminId, setAdminId] = useState(sessionStorage.getItem("adminId"));
   const [errors, setErrors] = useState([]);
 
   const navigate = useNavigate();
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
 
   //to get the user details
   const getUser = async () => {
@@ -23,6 +31,7 @@ export const AuthProvider = ({ children }) => {
         },
       });
       setUser(response.data.name);
+      setUserId(response.data.id);
       // console.log(user);
     } catch (error) {
       console.error(error);
@@ -38,6 +47,7 @@ export const AuthProvider = ({ children }) => {
         },
       });
       setAdmin(response.data.name);
+      setAdminId(response.data.id);
     } catch (error) {
       console.error(error);
     }
@@ -51,8 +61,11 @@ export const AuthProvider = ({ children }) => {
       const token = response.data.access_token;
       sessionStorage.setItem("token", token);
       setToken(token);
-      sessionStorage.setItem("user", response.data.user.name);
-      setUser(response.data.user.name);
+      sessionStorage.setItem("user", JSON.stringify(response.data.user));
+      setUser(JSON.stringify(response.data.user));
+
+      sessionStorage.setItem("userId", response.data.user.id);
+      setUserId(response.data.user.id);
       navigate("/");
     } catch (e) {
       //need to fix this
@@ -71,9 +84,10 @@ export const AuthProvider = ({ children }) => {
       const token = response.data.access_token;
       sessionStorage.setItem("token", token);
       setToken(token);
-      setAdmin(response.data.user.name);
-      sessionStorage.setItem("admin", response.data.user.name);
-      setAdmin(response.data.user.name);
+      sessionStorage.setItem("admin", JSON.stringify(response.data.user));
+      setAdmin(JSON.stringify(response.data.user));
+      sessionStorage.setItem("adminId", response.data.user.id);
+      setAdminId(response.data.user.id);
       navigate("/adminDash");
     } catch (e) {
       //need to fix this
@@ -93,6 +107,7 @@ export const AuthProvider = ({ children }) => {
 
       sessionStorage.removeItem("token");
       sessionStorage.removeItem("user");
+      sessionStorage.removeItem("userId");
       navigate("/login");
       // window.location.reload();
     } catch (error) {
@@ -110,6 +125,7 @@ export const AuthProvider = ({ children }) => {
 
       sessionStorage.removeItem("token");
       sessionStorage.removeItem("admin");
+      sessionStorage.removeItem("adminId");
       navigate("/admin");
       // window.location.reload();
     } catch (error) {
@@ -127,8 +143,12 @@ export const AuthProvider = ({ children }) => {
     <AuthContext.Provider
       // value={value}
       value={{
+        config,
+        http,
         user,
+        userId,
         admin,
+        adminId,
         errors,
         token,
         setToken,
