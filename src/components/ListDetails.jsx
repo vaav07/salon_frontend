@@ -5,7 +5,7 @@ const ListDetails = ({ openModal, setViewModal, data, header }) => {
     openModal();
   };
   return (
-    <div className="bg-gradient-to-r from-green-400 to-blue-500 rounded-lg p-4">
+    <div className="bg-blue-200 rounded-lg p-4">
       <table className="w-full text-center border-collapse">
         <thead className="">
           <tr className=" bg-blue-300 rounded-lg h-10 text-gray-600">
@@ -38,31 +38,6 @@ const ListDetails = ({ openModal, setViewModal, data, header }) => {
               </td>
             </tr>
           ))}
-
-          {/* <tr className="border-b border-red-100 h-10  hover:bg-red-300">
-            <td>2</td>
-            <td>Witchy Woman</td>
-            <td>The Eagles</td>
-            <td>9876543210</td>
-            <td>
-              Male{" "}
-              <button className="border border-black px-1 text-sm hover:bg-gray-700">
-                view
-              </button>
-            </td>
-          </tr>
-          <tr className="border-b border-red-100 h-10 hover:bg-red-300">
-            <td>3</td>
-            <td>Shining Star</td>
-            <td>Earth, Wind</td>
-            <td>9876543210</td>
-            <td>
-              Male{" "}
-              <button className="border border-black px-1 text-sm hover:bg-gray-700">
-                view
-              </button>
-            </td>
-          </tr> */}
         </tbody>
       </table>
       <div className="flex w-80 text-sm justify-between md:w-1/2 m-auto mt-10">

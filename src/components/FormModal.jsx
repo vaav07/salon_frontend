@@ -23,12 +23,21 @@ const FormModal = ({ isOpen, closeModal, header }) => {
 
   const onSubmit = (data) => {
     console.log("form submitted", data);
-    http.post(`/api/addcustomer`, data, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    if (header === "Customer") {
+      http.post(`/api/addcustomer`, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    } else {
+      http.post(`/api/addemployee`, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    }
   };
   return (
     <>
@@ -85,7 +94,7 @@ const FormModal = ({ isOpen, closeModal, header }) => {
                                     message: "fullname is required",
                                   },
                                 })}
-                                autoComplete="given-name"
+                                autoComplete="customer_fullname"
                                 className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                               />
                             </div>
@@ -351,19 +360,19 @@ const FormModal = ({ isOpen, closeModal, header }) => {
                               <div className="mt-1">
                                 <input
                                   type="date"
-                                  {...register("doj", {
+                                  {...register("date_of_joining", {
                                     required: {
                                       value: false,
                                       message: "doj is required",
                                     },
                                   })}
-                                  id="doj"
-                                  autoComplete="odj"
+                                  id="date_of_joining"
+                                  autoComplete="date_of_joining"
                                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 />
                               </div>
                               <p className="text-xs text-red-600 ml-2 mt-1">
-                                {errors.doj?.message}
+                                {errors.date_of_joining?.message}
                               </p>
                             </div>
                           ) : (

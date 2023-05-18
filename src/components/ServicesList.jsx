@@ -1,4 +1,4 @@
-const ServicesList = ({ openModal }) => {
+const ServicesList = ({ openModal, data }) => {
   return (
     <>
       <table className="w-full text-center border-collapse">
@@ -10,26 +10,16 @@ const ServicesList = ({ openModal }) => {
           </tr>
         </thead>
         <tbody>
-          <tr className="border-b border-gray-700 h-14">
-            <td>1</td>
-            <td>Manicure</td>
-            <td>Rs 300/-</td>
-          </tr>
-          <tr className="border-b border-gray-700 h-14">
-            <td>2</td>
-            <td>Pedicure</td>
-            <td>Rs 300/-</td>
-          </tr>
-          <tr className="border-b border-gray-700 h-14">
-            <td>3</td>
-            <td>Haircut</td>
-            <td>Rs 300/-</td>
-          </tr>
-          <tr className="border-b border-gray-700 h-14">
-            <td>4</td>
-            <td>Eyebrows</td>
-            <td>Rs 300/-</td>
-          </tr>
+          {data.map((item, index) => (
+            <tr
+              key={item.service_name}
+              className="border-b border-gray-700 h-14"
+            >
+              <td>{index + 1}</td>
+              <td>{item.service_name}</td>
+              <td>Rs {item.price}/-</td>
+            </tr>
+          ))}
         </tbody>
       </table>
       <div className=" w-80 text-sm ml-auto mt-10">
