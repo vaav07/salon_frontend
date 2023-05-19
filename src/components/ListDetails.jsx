@@ -1,8 +1,15 @@
 /* eslint-disable react/prop-types */
-const ListDetails = ({ openModal, setViewModal, data, header }) => {
-  const viewM = () => {
+const ListDetails = ({
+  openModal,
+  setViewModal,
+  data,
+  header,
+  getSpecificData,
+}) => {
+  const viewM = (id) => {
     setViewModal(true);
     openModal();
+    getSpecificData(id);
   };
   return (
     <div className="bg-blue-200 rounded-lg p-4">
@@ -20,7 +27,7 @@ const ListDetails = ({ openModal, setViewModal, data, header }) => {
           {data.map((item, index) => (
             <tr
               key={item.id}
-              className="border-b border-red-100 h-10 hover:bg-red-300"
+              className="border-b border-red-100 h-10 hover:bg-blue-400 cursor-pointer"
             >
               <td>{index + 1}</td>
               {/* need to change the name to only fullname after new migration */}
@@ -30,7 +37,7 @@ const ListDetails = ({ openModal, setViewModal, data, header }) => {
               <td>
                 {item.gender}
                 <button
-                  onClick={viewM}
+                  onClick={() => viewM(item.id)}
                   className="border border-black px-1 text-sm hover:bg-gray-700"
                 >
                   view

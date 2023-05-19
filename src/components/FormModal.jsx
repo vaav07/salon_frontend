@@ -11,18 +11,29 @@ const FormModal = ({ isOpen, closeModal, header }) => {
 
   const storedData = JSON.parse(user);
 
+  //need to change customer fullname to only fullname reminder
   const form = useForm({
     defaultValues: {
       admin_id: storedData.admin_id,
       user_id: storedData.id,
+      // customer_fullname: "",
+      // email: "",
+      // phone_no: "",
+      // alt_phone_no: "",
+      // address: "",
+      // state: "",
+      // city: "",
+      // pincode: "",
+      // gender: "",
+      // date_of_joining: "",
     },
   });
 
-  const { register, control, handleSubmit, formState } = form;
+  const { register, control, handleSubmit, formState, reset } = form;
   const { errors } = formState;
 
   const onSubmit = (data) => {
-    console.log("form submitted", data);
+    // console.log("form submitted", data);
     if (header === "Customer") {
       http.post(`/api/addcustomer`, data, {
         headers: {
@@ -38,6 +49,7 @@ const FormModal = ({ isOpen, closeModal, header }) => {
         },
       });
     }
+    reset();
   };
   return (
     <>
@@ -227,7 +239,7 @@ const FormModal = ({ isOpen, closeModal, header }) => {
                                   },
                                 })}
                                 id="state"
-                                autoComplete="address-level2"
+                                autoComplete="state"
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                               />
                             </div>
@@ -253,7 +265,7 @@ const FormModal = ({ isOpen, closeModal, header }) => {
                                   },
                                 })}
                                 id="city"
-                                autoComplete="address-level1"
+                                autoComplete="city"
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                               />
                             </div>
@@ -355,7 +367,7 @@ const FormModal = ({ isOpen, closeModal, header }) => {
                                 htmlFor="doj"
                                 className="block text-sm font-medium leading-6 text-gray-900"
                               >
-                                Date of Joinig:
+                                Date of Joining:
                               </label>
                               <div className="mt-1">
                                 <input
@@ -385,14 +397,18 @@ const FormModal = ({ isOpen, closeModal, header }) => {
                         <button
                           type="button"
                           className="inline-flex justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 text-sm font-medium text-red-900 hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
-                          onClick={closeModal}
+                          // onClick={closeModal}
+                          onClick={() => {
+                            reset();
+                            closeModal();
+                          }}
                         >
                           Back
                         </button>
                         <button
                           type="submit"
                           className="inline-flex justify-center rounded-md border border-transparent bg-green-100 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
-                          // onClick={closeModal}
+                          // onClick={() => reset()}
                         >
                           Add {header}
                         </button>

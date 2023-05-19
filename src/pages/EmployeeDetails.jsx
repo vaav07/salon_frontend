@@ -12,12 +12,25 @@ const EmployeeDetails = () => {
   const [viewModal, setViewModal] = useState(false);
   const [employees, setEmployees] = useState([]);
 
+  const [specificEmployee, setSpecificEmployee] = useState({});
+
   const getEmployees = async () => {
     try {
       const response = await http.get(`/api/getemployees/${userId}`, config);
       const data = response.data.result;
       setEmployees(data);
       // console.log(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getSpecificEmployee = async (id) => {
+    try {
+      const response = await http.get(`/api/getspecificEmployee/${id}`, config);
+      const specificEmployee = response.data.result;
+      // return specificCustomer;
+      setSpecificEmployee(specificEmployee);
     } catch (error) {
       console.error(error);
     }
@@ -30,6 +43,7 @@ const EmployeeDetails = () => {
 
   function closeModal() {
     setIsOpen(false);
+    setSpecificEmployee({});
   }
 
   function openModal() {
@@ -47,16 +61,18 @@ const EmployeeDetails = () => {
             setViewModal={setViewModal}
             data={employees}
             header="Employee"
+            getSpecificData={getSpecificEmployee}
           />
         </div>
       </div>
 
-      {viewModal && (
+      {viewModal && Object.keys(specificEmployee).length > 1 && (
         <ViewDetails
           closeModal={closeModal}
           isOpen={isOpen}
           setViewModal={setViewModal}
           header="Employee"
+          specificData={specificEmployee}
         />
       )}
       {!viewModal && (

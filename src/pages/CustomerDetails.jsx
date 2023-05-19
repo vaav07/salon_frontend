@@ -11,6 +11,8 @@ const CustomerDetails = () => {
   let [isOpen, setIsOpen] = useState(false);
   const [viewModal, setViewModal] = useState(false);
   const [customers, setCustomers] = useState([]);
+
+  const [specificCustomer, setSpecificCustomer] = useState({});
   // const [viewModalData, setViewModalData] = useState({})
 
   const getCustomers = async () => {
@@ -24,6 +26,17 @@ const CustomerDetails = () => {
     }
   };
 
+  const getSpecificCustomer = async (id) => {
+    try {
+      const response = await http.get(`/api/getspecificCustomer/${id}`, config);
+      const specificCustomer = response.data.result;
+      // return specificCustomer;
+      setSpecificCustomer(specificCustomer);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     getCustomers();
     // getUser();
@@ -31,6 +44,7 @@ const CustomerDetails = () => {
 
   function closeModal() {
     setIsOpen(false);
+    setSpecificCustomer({});
   }
 
   function openModal() {
@@ -50,16 +64,19 @@ const CustomerDetails = () => {
             data={customers}
             header="Customer"
             // config={config}
+            getSpecificData={getSpecificCustomer}
           />
         </div>
       </div>
 
-      {viewModal && (
+      {viewModal && Object.keys(specificCustomer).length > 1 && (
         <ViewDetails
           closeModal={closeModal}
           isOpen={isOpen}
           setViewModal={setViewModal}
           header="Customer"
+          // data={getSpecificCustomer}
+          specificData={specificCustomer}
         />
       )}
       {!viewModal && (
