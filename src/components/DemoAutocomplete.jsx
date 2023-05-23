@@ -1,4 +1,8 @@
 import { useState, useEffect } from "react";
+import useAuthContext from "../context/AuthContext";
+
+import AsyncSelect from "react-select/async";
+import { useForm, Controller } from "react-hook-form";
 
 function AutocompleteSearchBox() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -6,17 +10,23 @@ function AutocompleteSearchBox() {
   const [selectedResult, setSelectedResult] = useState(null);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [showForm, setShowForm] = useState(true);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [invoice, setInvoice] = useState({});
+
+  const { control, handleSubmit, register, reset } = useForm();
+
+  const { http, config, userId } = useAuthContext();
 
   useEffect(() => {
     // Call your search API endpoint with the searchTerm
     // and update searchResults with the response data
     async function fetchSearchResults() {
-      const response = await fetch(
-        `https://dummyjson.com/users/search?q=${searchTerm}`
+      const response = await http.get(
+        `/api/search?q=${searchTerm}&user_id=${userId}`,
+        config
       );
-      const data = await response.json();
-      setSearchResults(data.users);
-      console.log(data.users);
+      setSearchResults(response.data.users);
+      console.log(response.data.users);
     }
 
     // Only call the API if searchTerm is not an empty string
@@ -39,14 +49,39 @@ function AutocompleteSearchBox() {
     setFormSubmitted(false);
   }
 
-  function handleFormSubmit(event) {
-    event.preventDefault();
+  function onSubmit(data) {
     // Submit the form data to your API
     // and handle the response as needed
 
+    const formattedData = {
+      name: data.name,
+      email: data.email,
+      selectedOptions: data.selectedOptions.map((option) => option.value),
+      price: totalPrice,
+    };
+
+    console.log("formatted data", formattedData);
+    setInvoice(formattedData);
     setFormSubmitted(true);
     setShowForm(false);
   }
+
+  // Define an async function to fetch the options from the backend
+  const loadOptions = async () => {
+    // Make the API call to fetch the options from the backend
+    const response = await http.get(`/api/getservices`, config);
+    const data = await response.data.result;
+    console.log("Data", data);
+
+    // Transform the data to match the required format of React Select
+    const options = data.map((item) => ({
+      value: item.service_name,
+      label: item.service_name,
+      price: parseFloat(item.price),
+    }));
+
+    return options;
+  };
 
   function renderInvoice() {
     if (!selectedResult || !formSubmitted) {
@@ -60,7 +95,9 @@ function AutocompleteSearchBox() {
           <div>
             <p className="font-bold">Name:</p>
             <p>
-              {selectedResult.firstName} {selectedResult.lastName}
+              {selectedResult.customer_fullname}
+              {/* {selectedResult.lastName} */}
+              {console.log("invoice", invoice)}
             </p>
           </div>
           <div>
@@ -73,18 +110,19 @@ function AutocompleteSearchBox() {
             <p className="font-bold">Summary:</p>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <p>Service Type:</p>
+                <p>Service Type: </p>
+                <p>{invoice.selectedOptions.join(", ")}</p>
+
+                {/* Render more summary fields as needed */}
+              </div>
+              {/* <div>
                 <p>Price:</p>
-                {/* Render more summary fields as needed */}
-              </div>
-              <div>
-                <p>Pedicure</p>
-                <p>$25.00</p>
-                {/* Render more summary fields as needed */}
-              </div>
+                <p></p> */}
+              {/* Render more summary fields as needed */}
+              {/* </div> */}
             </div>
             <hr className="my-4" />
-            <p className="font-bold">Total: $25.00</p>
+            <p className="font-bold">Total: Rs {invoice.price}/-</p>
           </div>
         </div>
       </div>
@@ -102,15 +140,19 @@ function AutocompleteSearchBox() {
           placeholder="Search"
         />
         {searchResults.map((result) => (
-          <div key={result.id} onClick={() => handleResultClick(result)}>
-            {result.firstName}
+          <div
+            className="mt-1 py-1 px-2 rounded-sm bg-slate-300 flex cursor-pointer hover:bg-slate-400"
+            key={result.id}
+            onClick={() => handleResultClick(result)}
+          >
+            {result.customer_fullname} {result.phone_no}
           </div>
         ))}
       </div>
 
       <div className="mt-6">
         {showForm && (
-          <form onSubmit={handleFormSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             {selectedResult && (
               <div className="space-y-3">
                 <div className="flex  space-x-3">
@@ -121,8 +163,8 @@ function AutocompleteSearchBox() {
                     className="w-2/3 border border-gray-400 rounded-lg px-2 py-1"
                     type="text"
                     id="name"
-                    name="name"
-                    value={selectedResult.firstName}
+                    {...register("name")}
+                    value={selectedResult.customer_fullname}
                   />
                 </div>
                 <div className=" flex space-x-3">
@@ -133,19 +175,42 @@ function AutocompleteSearchBox() {
                     className="w-2/3 border border-gray-400 rounded-lg px-2 py-1"
                     type="email"
                     id="email"
-                    name="email"
+                    {...register("email")}
                     value={selectedResult.email}
                   />
                 </div>
 
                 <div className="flex space-x-3">
-                  <label className="w-1/3" htmlFor="">
-                    Service Type
-                  </label>
-                  <select className="w-2/3 border border-gray-400 rounded-lg px-2 py-1">
-                    <option value="">Pedicure</option>
-                    <option value="">Menicure</option>
-                  </select>
+                  <p className="w-1/3">Service Type</p>
+
+                  <Controller
+                    name="selectedOptions"
+                    control={control}
+                    defaultValue={[]}
+                    render={({ field }) => (
+                      <AsyncSelect
+                        {...field}
+                        isMulti
+                        cacheOptions
+                        defaultOptions
+                        loadOptions={loadOptions}
+                        className="w-2/3 border border-gray-400 rounded-lg"
+                        onChange={(selectedOptions) => {
+                          field.onChange(selectedOptions); // Update the value of the field object
+                          // console.log("first", selectedOptions);
+                          let price = selectedOptions.map(
+                            (option) => option.price
+                          );
+                          const total = price.reduce(
+                            (accumulator, currentValue) =>
+                              accumulator + currentValue,
+                            0
+                          );
+                          setTotalPrice(total);
+                        }}
+                      />
+                    )}
+                  />
                 </div>
 
                 <div className="flex space-x-3">
@@ -155,6 +220,8 @@ function AutocompleteSearchBox() {
                   <input
                     className="w-2/3 border border-gray-400 rounded-lg px-2 py-1"
                     type="number"
+                    {...register("price")}
+                    value={totalPrice}
                   />
                 </div>
               </div>
@@ -168,7 +235,7 @@ function AutocompleteSearchBox() {
             {selectedResult && (
               <button
                 type="submit"
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                className=" bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               >
                 Submit
               </button>

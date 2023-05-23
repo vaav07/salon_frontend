@@ -14,6 +14,7 @@ import AuthLayout from "./layouts/AuthLayout";
 import AdminPage from "./pages/Admin/AdminPage";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
 import AdminAuthLayout from "./layouts/AdminAuthLayout";
+// import PraticeComp from "./components/PraticeComp";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         {/* Admin Login */}
         <Route path="/admin" element={<AdminPage />} />
+        {/* <Route path="/pratice" element={<PraticeComp />} /> */}
 
         {/* Admin Routes */}
         <Route element={<AdminAuthLayout />}>
