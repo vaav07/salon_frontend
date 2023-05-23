@@ -17,7 +17,7 @@ const ServicesList = ({ openModal, data }) => {
             >
               <td>{index + 1}</td>
               <td>{item.service_name}</td>
-              <td>Rs {item.price}/-</td>
+              <td>Rs {parseFloat(item.price)}/-</td>
             </tr>
           ))}
         </tbody>

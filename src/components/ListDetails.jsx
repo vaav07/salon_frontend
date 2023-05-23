@@ -31,7 +31,7 @@ const ListDetails = ({
             >
               <td>{index + 1}</td>
               {/* need to change the name to only fullname after new migration */}
-              <td>{item.customer_fullname}</td>
+              <td>{item.fullname}</td>
               <td>{item.email}</td>
               <td>{item.phone_no}</td>
               <td>

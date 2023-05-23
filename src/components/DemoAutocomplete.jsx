@@ -57,6 +57,7 @@ function AutocompleteSearchBox() {
       name: data.name,
       email: data.email,
       selectedOptions: data.selectedOptions.map((option) => option.value),
+      label: data.selectedOptions.map((option) => option.label),
       price: totalPrice,
     };
 
@@ -75,7 +76,7 @@ function AutocompleteSearchBox() {
 
     // Transform the data to match the required format of React Select
     const options = data.map((item) => ({
-      value: item.service_name,
+      value: item.id,
       label: item.service_name,
       price: parseFloat(item.price),
     }));
@@ -95,9 +96,8 @@ function AutocompleteSearchBox() {
           <div>
             <p className="font-bold">Name:</p>
             <p>
-              {selectedResult.customer_fullname}
+              {selectedResult.fullname}
               {/* {selectedResult.lastName} */}
-              {console.log("invoice", invoice)}
             </p>
           </div>
           <div>
@@ -110,8 +110,8 @@ function AutocompleteSearchBox() {
             <p className="font-bold">Summary:</p>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <p>Service Type: </p>
-                <p>{invoice.selectedOptions.join(", ")}</p>
+                <p className="font-semibold">Service Type: </p>
+                <p>{invoice.label.join(", ")}</p>
 
                 {/* Render more summary fields as needed */}
               </div>
@@ -132,20 +132,23 @@ function AutocompleteSearchBox() {
   return (
     <div className="container px-4  sm:w-1/2 mx-auto">
       <div className="my-2">
-        <input
-          className="w-full py-1 px-2"
-          type="text"
-          value={searchTerm}
-          onChange={handleInputChange}
-          placeholder="Search"
-        />
+        {!selectedResult && (
+          <input
+            className="w-full py-1 px-2"
+            type="text"
+            value={searchTerm}
+            onChange={handleInputChange}
+            placeholder="Search"
+          />
+        )}
+
         {searchResults.map((result) => (
           <div
             className="mt-1 py-1 px-2 rounded-sm bg-slate-300 flex cursor-pointer hover:bg-slate-400"
             key={result.id}
             onClick={() => handleResultClick(result)}
           >
-            {result.customer_fullname} {result.phone_no}
+            {result.fullname} {result.phone_no}
           </div>
         ))}
       </div>
@@ -164,7 +167,7 @@ function AutocompleteSearchBox() {
                     type="text"
                     id="name"
                     {...register("name")}
-                    value={selectedResult.customer_fullname}
+                    value={selectedResult.fullname}
                   />
                 </div>
                 <div className=" flex space-x-3">
@@ -218,10 +221,11 @@ function AutocompleteSearchBox() {
                     Price
                   </label>
                   <input
-                    className="w-2/3 border border-gray-400 rounded-lg px-2 py-1"
+                    className="w-2/3  border-gray-400 rounded-lg px-2 py-1"
                     type="number"
                     {...register("price")}
                     value={totalPrice}
+                    disabled
                   />
                 </div>
               </div>

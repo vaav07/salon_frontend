@@ -20,8 +20,7 @@ const ViewDetails = ({
       admin_id: specificData.admin_id,
       user_id: specificData.user_id,
       //need to change this to only fullname everywhere reminder
-      employee_fullname:
-        specificData.employee_fullname || specificData.customer_fullname,
+      fullname: specificData.fullname,
       email: specificData.email,
       phone_no: specificData.phone_no,
       alt_phone_no: specificData.alt_phone_no,
@@ -43,8 +42,9 @@ const ViewDetails = ({
   };
 
   const onSubmit = (data) => {
+    console.log(data);
     if (header === "Customer") {
-      http.put(`/api/updatespecificData/${specificData.id}`, data, {
+      http.put(`/api/updatespecificCustomer/${specificData.id}`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -102,7 +102,7 @@ const ViewDetails = ({
                     >
                       <div className="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                         <label
-                          htmlFor="customer_fullname"
+                          htmlFor="fullname"
                           className="text-sm font-medium leading-6 text-gray-900"
                         >
                           Full name
@@ -110,14 +110,14 @@ const ViewDetails = ({
                         <input
                           // value={specificData.customer_fullname}
                           type="text"
-                          id="customer_fullname"
-                          {...register("employee_fullname", {
+                          id="fullname"
+                          {...register("fullname", {
                             required: {
                               value: true,
                               message: "fullname is required",
                             },
                           })}
-                          autoComplete="customer_fullname"
+                          autoComplete="fullname"
                           className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"
                         />
                         {/* <p className="text-xs text-red-600 ml-2 mt-1">

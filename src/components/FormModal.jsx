@@ -91,7 +91,7 @@ const FormModal = ({ isOpen, closeModal, header }) => {
                         <div className="mt-1 grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-6">
                           <div className="sm:col-span-full">
                             <label
-                              htmlFor="customer_fullname"
+                              htmlFor="fullname"
                               className="block text-sm font-medium leading-6 text-gray-900"
                             >
                               Full Name
@@ -99,19 +99,19 @@ const FormModal = ({ isOpen, closeModal, header }) => {
                             <div className="mt-1">
                               <input
                                 type="text"
-                                id="customer_fullname"
-                                {...register("customer_fullname", {
+                                id="fullname"
+                                {...register("fullname", {
                                   required: {
                                     value: true,
                                     message: "fullname is required",
                                   },
                                 })}
-                                autoComplete="customer_fullname"
+                                autoComplete="fullname"
                                 className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                               />
                             </div>
                             <p className="text-xs text-red-600 ml-2 mt-1">
-                              {errors.customer_fullname?.message}
+                              {errors.fullname?.message}
                             </p>
                           </div>
 

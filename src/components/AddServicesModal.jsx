@@ -13,7 +13,6 @@ const AddServicesModal = ({ isOpen, closeModal }) => {
   const form = useForm({
     defaultValues: {
       admin_id: storedData.admin_id,
-      user_id: storedData.id,
     },
   });
 
