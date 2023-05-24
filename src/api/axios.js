@@ -2,14 +2,14 @@
 import axios from "axios";
 
 export default axios.create({
-  // baseURL: "http://localhost:8000",
+  // baseURL: "",
   // headers: {
   //   // "X-Requested-With": "XMLHttpRequest",
   //   "Content-Type": "application/json",
   // },
   // withCredentials: true,
 
-  baseURL: "http://localhost:8000",
+  baseURL: process.env.REACT_APP_BACKEND_URL,
   headers: {
     "Content-Type": "application/json",
   },
