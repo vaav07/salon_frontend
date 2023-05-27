@@ -3,14 +3,15 @@ import { RadioGroup } from "@headlessui/react";
 
 const plans = [
   {
+    name: "All",
+  },
+  {
     name: "1 Week ago",
   },
   {
     name: "2 week ago",
   },
-  {
-    name: "3 week ago",
-  },
+
   {
     name: "1 month ago",
   },

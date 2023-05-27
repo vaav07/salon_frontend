@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import useAuthContext from "../context/AuthContext";
 
 import AsyncSelect from "react-select/async";
+import Select from "react-select";
 import { useForm, Controller } from "react-hook-form";
 
 function AutocompleteSearchBox() {
@@ -12,10 +13,17 @@ function AutocompleteSearchBox() {
   const [showForm, setShowForm] = useState(true);
   const [totalPrice, setTotalPrice] = useState(0);
   const [invoice, setInvoice] = useState({});
+  // const [employeeData, setEmployeeData] = useState([]);
 
   const { control, handleSubmit, register, reset } = useForm();
 
   const { http, config, userId } = useAuthContext();
+
+  const paymentOptions = [
+    { value: "upi", label: "UPI" },
+    { value: "cash", label: "CASH" },
+    { value: "card", label: "CARD" },
+  ];
 
   useEffect(() => {
     // Call your search API endpoint with the searchTerm
@@ -35,6 +43,7 @@ function AutocompleteSearchBox() {
     } else {
       setSearchResults([]);
     }
+    // loadEmployee();
   }, [searchTerm]);
 
   function handleInputChange(event) {
@@ -49,25 +58,81 @@ function AutocompleteSearchBox() {
     setFormSubmitted(false);
   }
 
-  function onSubmit(data) {
+  function getCurrentDate() {
+    return new Date().toISOString().slice(0, 10);
+  }
+
+  function getCurrentTime() {
+    return new Date().toLocaleTimeString("en-US", { hour12: false });
+  }
+
+  // Usage
+  // const currentDate = getCurrentDate();
+  // const currentTime = getCurrentTime();
+
+  async function onSubmit(data) {
     // Submit the form data to your API
     // and handle the response as needed
 
+    // "admin_id": 1,
+    // "user_id": 1,
+    // "employee_id": 2,
+    // "customer_id": 3,
+    // "sale_date": "2023-05-24",
+    // "sale_time": "15:49:00",
+    // "payment_method": "UPI",
+    // "total_price": "500",
+    // "services": [1,2]
+
     const formattedData = {
+      admin_id: userId,
+      user_id: userId,
+      customer_id: selectedResult.id,
+      employee_id: data.employee_id.value,
+      services: data.selectedOptions.map((option) => option.value),
+      total_price: totalPrice,
+      // need to add
+      payment_method: data.payment_method.value,
+      sale_date: getCurrentDate(),
+      sale_time: getCurrentTime(),
+
+      //just to show data on next page
       name: data.name,
       email: data.email,
-      selectedOptions: data.selectedOptions.map((option) => option.value),
       label: data.selectedOptions.map((option) => option.label),
-      price: totalPrice,
     };
 
     console.log("formatted data", formattedData);
+
+    try {
+      await http.post(`/api/addsale`, formattedData, config);
+      console.log("Data submitted successfully");
+    } catch (error) {
+      console.error("Error creating user:", error.response.data);
+    }
+
+    // http.post(`/api/addSale`, formattedData, config);
+
     setInvoice(formattedData);
     setFormSubmitted(true);
     setShowForm(false);
   }
 
+  // const filterEmployeeData = (inputValue) => {
+  //   return employeeData.filter((i) =>
+  //     i.label.toLowerCase().includes(inputValue.toLowerCase())
+  //   );
+  // };
+
+  const promiseOptions = (inputValue) =>
+    new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(loadEmployee(inputValue));
+      }, 1000);
+    });
+
   // Define an async function to fetch the options from the backend
+
   const loadOptions = async () => {
     // Make the API call to fetch the options from the backend
     const response = await http.get(`/api/getservices`, config);
@@ -82,6 +147,28 @@ function AutocompleteSearchBox() {
     }));
 
     return options;
+  };
+
+  const loadEmployee = async (inputValue) => {
+    try {
+      const response = await http.get(`/api/getemployees/${userId}`, config);
+      const data = response.data.result;
+      console.log("Employee", data);
+
+      const filteredData = data.filter((item) =>
+        item.fullname.toLowerCase().includes(inputValue.toLowerCase())
+      );
+
+      const options = filteredData.map((item) => ({
+        value: item.id,
+        label: item.fullname,
+      }));
+
+      return options;
+    } catch (error) {
+      console.log("Error fetching employee data", error);
+      return [];
+    }
   };
 
   function renderInvoice() {
@@ -122,7 +209,7 @@ function AutocompleteSearchBox() {
               {/* </div> */}
             </div>
             <hr className="my-4" />
-            <p className="font-bold">Total: Rs {invoice.price}/-</p>
+            <p className="font-bold">Total: Rs {invoice.total_price}/-</p>
           </div>
         </div>
       </div>
@@ -211,6 +298,47 @@ function AutocompleteSearchBox() {
                           );
                           setTotalPrice(total);
                         }}
+                      />
+                    )}
+                  />
+                </div>
+
+                <div className="flex space-x-3">
+                  <label htmlFor="" className="w-1/3">
+                    Employee Name
+                  </label>
+
+                  <Controller
+                    name="employee_id"
+                    control={control}
+                    render={({ field }) => (
+                      <AsyncSelect
+                        className="w-2/3 border border-gray-400 rounded-lg"
+                        {...field}
+                        cacheOptions
+                        defaultOptions
+                        isSearchable
+                        loadOptions={promiseOptions}
+                      />
+                    )}
+                  />
+                </div>
+
+                <div className="flex  space-x-3">
+                  <label htmlFor="name" className="w-1/3">
+                    Payment Method
+                  </label>
+                  <Controller
+                    name="payment_method"
+                    control={control}
+                    // rules={{ required: 'Payment Method is required' }}
+                    render={({ field }) => (
+                      <Select
+                        className="w-2/3 border border-gray-400 rounded-lg text-sm"
+                        {...field}
+                        options={paymentOptions}
+                        isClearable
+                        placeholder="Select Payment Method"
                       />
                     )}
                   />

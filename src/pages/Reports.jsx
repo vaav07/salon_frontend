@@ -12,7 +12,7 @@ const Reports = () => {
         <div className=" max-w-5xl m-auto">
           <h1 className="pt-6 text-2xl font-bold">Reports</h1>
 
-          <RadioButtons />
+          {/* <RadioButtons /> */}
 
           <ReportList />
 
