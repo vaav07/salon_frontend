@@ -1,10 +1,9 @@
 /* eslint-disable react/jsx-key */
 import { useMemo } from "react";
 import { usePagination, useSortBy, useTable } from "react-table";
-import MOCK_DATA from "./MOCK_DATA.json";
+
 import useAuthContext from "../context/AuthContext";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 
 const ReportList = () => {
   const { http, config, userId } = useAuthContext();
@@ -14,7 +13,7 @@ const ReportList = () => {
   useEffect(() => {
     async function reportsData() {
       const response = await http.get(`/api/getreports/${userId}`, config);
-      console.log("Reports Data", response.data);
+      // console.log("Reports Data", response.data);
       setApiData(response.data);
     }
     reportsData();

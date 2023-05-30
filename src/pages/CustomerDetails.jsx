@@ -18,7 +18,7 @@ const CustomerDetails = () => {
   const getCustomers = async () => {
     try {
       const response = await http.get(`/api/getcustomers/${userId}`, config);
-      const data = response.data.result;
+      const data = response.data;
       setCustomers(data);
       // console.log(data);
     } catch (error) {

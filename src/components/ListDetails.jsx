@@ -21,6 +21,8 @@ const ListDetails = ({
             <th>Email</th>
             <th>Phone</th>
             <th>Gender</th>
+            {/* <th>Last Visited</th> */}
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -34,8 +36,9 @@ const ListDetails = ({
               <td>{item.fullname}</td>
               <td>{item.email}</td>
               <td>{item.phone_no}</td>
-              <td>
-                {item.gender}
+              <td>{item.gender}</td>
+              {/* <td>{item.latest_sale?.sale_date}</td> */}
+              <td className="">
                 <button
                   onClick={() => viewM(item.id)}
                   className="border border-black px-1 text-sm hover:bg-gray-700"

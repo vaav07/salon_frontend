@@ -97,12 +97,12 @@ const Sidebar = () => {
               </Link>
             </li>
 
-            {/* <li className="nav-text">
-              <Link to="/settings">
-                <AiIcons.AiOutlineSetting />
-                <span>Settings</span>
+            <li className="nav-text">
+              <Link to="/visits">
+                <IoIcons.IoIosPaper />
+                <span>Visits</span>
               </Link>
-            </li> */}
+            </li>
 
             <li className="nav-text">
               <button className="logout-btn" onClick={logout}>

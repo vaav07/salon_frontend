@@ -49,4 +49,10 @@ export const SidebarData = [
     icon: <AiIcons.AiOutlineSetting />,
     cName: "nav-text",
   },
+  {
+    title: "Attendence",
+    path: "/Attendence",
+    icon: <IoIcons.IoIosPaper />,
+    cName: "nav-text",
+  },
 ];
