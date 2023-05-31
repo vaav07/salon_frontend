@@ -9,20 +9,67 @@ const ReportList = () => {
   const { http, config, userId } = useAuthContext();
 
   const [apiData, setApiData] = useState([]);
+  const [selectedPeriod, setSelectedPeriod] = useState(null);
+  const [selectedButton, setSelectedButton] = useState(null);
+  const [date, setDate] = useState({ current: "", end: "" });
+
+  const handlePeriodButtonClick = (period) => {
+    setSelectedPeriod(period);
+    setSelectedButton(period);
+  };
+
+  const handleChange = (e) => {
+    setDate({
+      ...date,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    // console.log("submit", date);
+    const response = await http.get(`/api/getreports/${userId}`, {
+      ...config,
+      params: {
+        startDate: date.current,
+        endDate: date.end,
+      },
+    });
+    setSelectedButton(null);
+    setApiData(response.data);
+    setDate({ current: "", end: "" });
+  };
 
   useEffect(() => {
-    async function reportsData() {
-      const response = await http.get(`/api/getreports/${userId}`, config);
+    async function reportsData(timePeriod) {
+      const currentDate = new Date();
+      const startDate = new Date();
+      startDate.setMonth(currentDate.getMonth() - timePeriod);
+
+      const formattedStartDate = startDate.toISOString().split("T")[0];
+      const formattedEndDate = currentDate.toISOString().split("T")[0];
+
+      // console.log(formattedStartDate);
+      // console.log(formattedEndDate);
+
+      const response = await http.get(`/api/getreports/${userId}`, {
+        ...config,
+        params: {
+          startDate: formattedStartDate,
+          endDate: formattedEndDate,
+        },
+      });
       // console.log("Reports Data", response.data);
       setApiData(response.data);
     }
-    reportsData();
-  }, []);
+
+    reportsData(selectedPeriod);
+  }, [selectedPeriod]);
 
   const columns = useMemo(
     () => [
       // {
-      //   Header: "Id",
+      //   Header: "No.",
       //   accessor: "id",
       // },
       {
@@ -81,6 +128,92 @@ const ReportList = () => {
 
   return (
     <>
+      <div className="flex justify-between">
+        <div className="space-x-2 text-center">
+          <button
+            //have to change color and set active class
+            className={`w-20 bg-${
+              selectedButton === 0 ? "purple-500/40" : "white"
+            } px-2 py-2 text-sm  rounded-md font-sans font-semibold shadow-sm hover:shadow-lg hover:bg-gray-300 hover:bg-purple-500/10 active:bg-purple-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none`}
+            data-ripple-dark="true"
+            onClick={() => handlePeriodButtonClick(0)}
+          >
+            Today
+          </button>
+          <button
+            className={`w-20  bg-${
+              selectedButton === 1 ? "purple-500/40" : "white"
+            } px-2 py-2 text-sm  rounded-md font-sans font-semibold shadow-sm hover:shadow-lg hover:bg-gray-300 hover:bg-purple-500/10 active:bg-purple-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none`}
+            data-ripple-dark="true"
+            onClick={() => handlePeriodButtonClick(1)}
+          >
+            1 Month
+          </button>
+          <button
+            className={`w-20 bg-${
+              selectedButton === 2 ? "purple-500/40" : "white"
+            } px-2 py-2 text-sm  rounded-md font-sans font-semibold shadow-sm hover:shadow-lg hover:bg-gray-300 hover:bg-purple-500/10 active:bg-purple-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none`}
+            data-ripple-dark="true"
+            onClick={() => handlePeriodButtonClick(2)}
+          >
+            2 Months
+          </button>
+          <button
+            className={`w-20 bg-${
+              selectedButton === 6 ? "purple-500/40" : "white"
+            } px-2 py-2 text-sm  rounded-md font-sans font-semibold shadow-sm hover:shadow-lg hover:bg-gray-300 hover:bg-purple-500/10 active:bg-purple-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none`}
+            data-ripple-dark="true"
+            onClick={() => handlePeriodButtonClick(6)}
+          >
+            6 Months
+          </button>
+          <button
+            className={`w-20 bg-${
+              selectedButton === 12 ? "purple-500/40" : "white"
+            } px-2 py-2 text-sm  rounded-md font-sans font-semibold shadow-sm hover:shadow-lg hover:bg-gray-300 hover:bg-purple-500/10 active:bg-purple-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none`}
+            data-ripple-dark="true"
+            onClick={() => handlePeriodButtonClick(12)}
+          >
+            1 Year
+          </button>
+        </div>
+
+        <div className="flex items-center space-x-2 mb-4 mr-4">
+          <div>
+            From{" "}
+            <input
+              className="rounded-lg text-center p-1"
+              type="date"
+              name="current"
+              id=""
+              onChange={handleChange}
+              // value={date.current}
+            />
+          </div>
+
+          <div>
+            to{" "}
+            <input
+              className="rounded-lg text-center p-1"
+              type="date"
+              name="end"
+              id=""
+              onChange={handleChange}
+              // value={date.end}
+            />
+          </div>
+          <div>
+            <button
+              className="middle none center rounded-lg bg-purple-500 py-2 px-2 font-sans text-xs font-bold uppercase text-white shadow-md shadow-purple-500/20 transition-all hover:shadow-lg hover:purple-pink-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+              data-ripple-light="true"
+              type="submit"
+              onClick={onSubmit}
+            >
+              Submit
+            </button>
+          </div>
+        </div>
+      </div>
       <table
         {...getTableProps}
         className="w-full text-center table-auto bg-white border border-gray-300  cursor-pointer border-collapse"

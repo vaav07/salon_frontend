@@ -10,7 +10,7 @@ const Reports = () => {
         <Sidebar />
 
         <div className=" max-w-5xl m-auto">
-          <h1 className="pt-6 text-2xl font-bold">Reports</h1>
+          <h1 className="pt-6 text-2xl font-bold mb-4">Reports</h1>
 
           {/* <RadioButtons /> */}
 
