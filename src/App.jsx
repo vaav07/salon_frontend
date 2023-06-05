@@ -14,7 +14,8 @@ import AuthLayout from "./layouts/AuthLayout";
 import AdminPage from "./pages/Admin/AdminPage";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
 import AdminAuthLayout from "./layouts/AdminAuthLayout";
-import Attendence from "./pages/Attendence";
+
+import LastVisted from "./pages/LastVisited";
 // import PraticeComp from "./components/PraticeComp";
 
 function App() {
@@ -42,7 +43,7 @@ function App() {
           <Route path="/services" element={<Services />} />
           <Route path="/employee" element={<EmployeeDetails />} />
           <Route path="/sales" element={<Sales />} />
-          <Route path="/visits" element={<Attendence />} />
+          <Route path="/visits" element={<LastVisted />} />
 
           {/* <Route path="/settings" element={<Settings />} /> */}
         </Route>

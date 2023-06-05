@@ -54,7 +54,9 @@ const CustomerDetails = () => {
   return (
     <>
       <div className="bg-zinc-200 ">
-        <Sidebar />
+        <div>
+          <Sidebar />
+        </div>
 
         <div className=" max-w-5xl m-auto">
           <h1 className="py-6 text-2xl font-bold">CUSTOMER DETAILS</h1>

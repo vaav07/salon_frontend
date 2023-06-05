@@ -6,19 +6,29 @@ import { usePagination, useSortBy, useTable } from "react-table";
 import useAuthContext from "../context/AuthContext";
 import { useState, useEffect } from "react";
 
-const Attendence = () => {
+const LastVisted = () => {
   const { http, config, userId } = useAuthContext();
 
   const [apiData, setApiData] = useState([]);
+  const [selectedButton, setSelectedButton] = useState(1);
+  const [selectedPeriod, setSelectedPeriod] = useState(1);
+
+  const handlePeriodButtonClick = (period) => {
+    setSelectedPeriod(period);
+    setSelectedButton(period);
+  };
 
   useEffect(() => {
-    async function reportsData() {
-      const response = await http.get(`/api/lastvisited/${userId}`, config);
+    async function reportsData(period) {
+      const response = await http.get(
+        `/api/inactiveCustomers/${userId}/${period}`,
+        config
+      );
       // console.log("Reports Data", response.data);
       setApiData(response.data);
     }
-    reportsData();
-  }, []);
+    reportsData(selectedPeriod);
+  }, [selectedPeriod]);
 
   const columns = useMemo(
     () => [
@@ -75,6 +85,62 @@ const Attendence = () => {
         <Sidebar />
         <div className=" max-w-5xl m-auto">
           <h1 className="pt-6 text-2xl font-bold">Visits</h1>
+          <div className="space-x-2 text-center">
+            <button
+              className={`w-20  ${
+                selectedButton === 1 ? "bg-purple-500/10" : "bg-white"
+              } px-2 py-2 text-sm  rounded-md font-sans font-semibold shadow-sm hover:shadow-lg hover:bg-gray-300 hover:bg-purple-500/10 active:bg-purple-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none`}
+              data-ripple-dark="true"
+              onClick={() => handlePeriodButtonClick(1)}
+            >
+              1 Month
+            </button>
+            <button
+              className={`w-20 ${
+                selectedButton === 2 ? "bg-purple-500/10" : "bg-white"
+              } px-2 py-2 text-sm  rounded-md font-sans font-semibold shadow-sm hover:shadow-lg hover:bg-gray-300 hover:bg-purple-500/10 active:bg-purple-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none`}
+              data-ripple-dark="true"
+              onClick={() => handlePeriodButtonClick(2)}
+            >
+              2 Months
+            </button>
+            <button
+              className={`w-20 ${
+                selectedButton === 3 ? "bg-purple-500/10" : "bg-white"
+              } px-2 py-2 text-sm  rounded-md font-sans font-semibold shadow-sm hover:shadow-lg hover:bg-gray-300 hover:bg-purple-500/10 active:bg-purple-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none`}
+              data-ripple-dark="true"
+              onClick={() => handlePeriodButtonClick(3)}
+            >
+              3 Months
+            </button>
+            <button
+              className={`w-20 ${
+                selectedButton === 4 ? "bg-purple-500/10" : "bg-white"
+              } px-2 py-2 text-sm  rounded-md font-sans font-semibold shadow-sm hover:shadow-lg hover:bg-gray-300 hover:bg-purple-500/10 active:bg-purple-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none`}
+              data-ripple-dark="true"
+              onClick={() => handlePeriodButtonClick(4)}
+            >
+              4 Months
+            </button>
+            <button
+              className={`w-20 ${
+                selectedButton === 5 ? "bg-purple-500/10" : "bg-white"
+              } px-2 py-2 text-sm  rounded-md font-sans font-semibold shadow-sm hover:shadow-lg hover:bg-gray-300 hover:bg-purple-500/10 active:bg-purple-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none`}
+              data-ripple-dark="true"
+              onClick={() => handlePeriodButtonClick(5)}
+            >
+              5 Months
+            </button>
+            <button
+              className={`w-20 ${
+                selectedButton === 6 ? "bg-purple-500/10" : "bg-white"
+              } px-2 py-2 text-sm  rounded-md font-sans font-semibold shadow-sm hover:shadow-lg hover:bg-gray-300 hover:bg-purple-500/10 active:bg-purple-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none`}
+              data-ripple-dark="true"
+              onClick={() => handlePeriodButtonClick(6)}
+            >
+              6 Months
+            </button>
+          </div>
 
           <section className="py-1 bg-blueGray-50">
             <div className="w-full px-4 mx-auto mt-12">
@@ -159,4 +225,4 @@ const Attendence = () => {
   );
 };
 
-export default Attendence;
+export default LastVisted;

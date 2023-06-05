@@ -132,8 +132,8 @@ const ReportList = () => {
         <div className="space-x-2 text-center">
           <button
             //have to change color and set active class
-            className={`w-20 bg-${
-              selectedButton === 0 ? "purple-500/40" : "white"
+            className={`w-20 ${
+              selectedButton === 0 ? "bg-purple-500/10" : "bg-white"
             } px-2 py-2 text-sm  rounded-md font-sans font-semibold shadow-sm hover:shadow-lg hover:bg-gray-300 hover:bg-purple-500/10 active:bg-purple-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none`}
             data-ripple-dark="true"
             onClick={() => handlePeriodButtonClick(0)}
@@ -141,8 +141,8 @@ const ReportList = () => {
             Today
           </button>
           <button
-            className={`w-20  bg-${
-              selectedButton === 1 ? "purple-500/40" : "white"
+            className={`w-20  ${
+              selectedButton === 1 ? "bg-purple-500/10" : "bg-white"
             } px-2 py-2 text-sm  rounded-md font-sans font-semibold shadow-sm hover:shadow-lg hover:bg-gray-300 hover:bg-purple-500/10 active:bg-purple-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none`}
             data-ripple-dark="true"
             onClick={() => handlePeriodButtonClick(1)}
@@ -150,8 +150,8 @@ const ReportList = () => {
             1 Month
           </button>
           <button
-            className={`w-20 bg-${
-              selectedButton === 2 ? "purple-500/40" : "white"
+            className={`w-20 ${
+              selectedButton === 2 ? "bg-purple-500/10" : "bg-white"
             } px-2 py-2 text-sm  rounded-md font-sans font-semibold shadow-sm hover:shadow-lg hover:bg-gray-300 hover:bg-purple-500/10 active:bg-purple-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none`}
             data-ripple-dark="true"
             onClick={() => handlePeriodButtonClick(2)}
@@ -159,8 +159,8 @@ const ReportList = () => {
             2 Months
           </button>
           <button
-            className={`w-20 bg-${
-              selectedButton === 6 ? "purple-500/40" : "white"
+            className={`w-20 ${
+              selectedButton === 6 ? "bg-purple-500/10" : "bg-white"
             } px-2 py-2 text-sm  rounded-md font-sans font-semibold shadow-sm hover:shadow-lg hover:bg-gray-300 hover:bg-purple-500/10 active:bg-purple-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none`}
             data-ripple-dark="true"
             onClick={() => handlePeriodButtonClick(6)}
@@ -168,8 +168,8 @@ const ReportList = () => {
             6 Months
           </button>
           <button
-            className={`w-20 bg-${
-              selectedButton === 12 ? "purple-500/40" : "white"
+            className={`w-20 ${
+              selectedButton === 12 ? "bg-purple-500/10" : "bg-white"
             } px-2 py-2 text-sm  rounded-md font-sans font-semibold shadow-sm hover:shadow-lg hover:bg-gray-300 hover:bg-purple-500/10 active:bg-purple-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none`}
             data-ripple-dark="true"
             onClick={() => handlePeriodButtonClick(12)}
@@ -214,54 +214,67 @@ const ReportList = () => {
           </div>
         </div>
       </div>
-      <table
-        {...getTableProps}
-        className="w-full text-center table-auto bg-white border border-gray-300  cursor-pointer border-collapse"
-        // className="min-w-full bg-white border border-gray-300"
-      >
-        <thead className="">
-          {headerGroups.map((headerGroup) => (
-            <tr
-              {...headerGroup.getHeaderGroupProps()}
-              // className=" bg-blue-300 rounded-lg h-10 text-gray-600"
+
+      <div className="w-full px-4 mx-auto mt-4">
+        <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-white ">
+          <div className="block w-full overflow-x-auto">
+            <table
+              {...getTableProps}
+              className="w-full text-center table-auto bg-white border border-gray-300  cursor-pointer border-collapse"
+              // className="min-w-full bg-white border border-gray-300"
             >
-              {headerGroup.headers.map((column) => (
-                <th
-                  className="py-3 px-4 bg-gray-200 font-bold uppercase text-sm text-gray-600 border-b border-gray-300"
-                  {...column.getHeaderProps(column.getSortByToggleProps())}
-                >
-                  {column.render("Header")}
-                  <span>
-                    {column.isSorted ? (column.isSortedDesc ? "🔽" : "🔼") : ""}
-                  </span>
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps}>
-          {page.map((row) => {
-            prepareRow(row);
-            return (
-              <tr
-                {...row.getRowProps()}
-                // className="border-b border-red-100 h-10 hover:bg-red-300"
-              >
-                {row.cells.map((cell) => {
+              <thead className="">
+                {headerGroups.map((headerGroup) => (
+                  <tr
+                    {...headerGroup.getHeaderGroupProps()}
+                    // className=" bg-blue-300 rounded-lg h-10 text-gray-600"
+                  >
+                    {headerGroup.headers.map((column) => (
+                      <th
+                        className="py-3 px-4 bg-gray-200 font-bold uppercase text-sm text-gray-600 border-b border-gray-300"
+                        {...column.getHeaderProps(
+                          column.getSortByToggleProps()
+                        )}
+                      >
+                        {column.render("Header")}
+                        <span>
+                          {column.isSorted
+                            ? column.isSortedDesc
+                              ? "🔽"
+                              : "🔼"
+                            : ""}
+                        </span>
+                      </th>
+                    ))}
+                  </tr>
+                ))}
+              </thead>
+              <tbody {...getTableBodyProps}>
+                {page.map((row) => {
+                  prepareRow(row);
                   return (
-                    <td
-                      className="py-2 px-4 border-b border-gray-300"
-                      {...cell.getCellProps()}
+                    <tr
+                      {...row.getRowProps()}
+                      // className="border-b border-red-100 h-10 hover:bg-red-300"
                     >
-                      {cell.render("Cell")}
-                    </td>
+                      {row.cells.map((cell) => {
+                        return (
+                          <td
+                            className="py-2 px-4 border-b border-gray-300"
+                            {...cell.getCellProps()}
+                          >
+                            {cell.render("Cell")}
+                          </td>
+                        );
+                      })}
+                    </tr>
                   );
                 })}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
 
       <div className="flex justify-between w-5/6 mx-auto mt-4">
         <button

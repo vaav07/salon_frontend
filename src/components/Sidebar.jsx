@@ -100,7 +100,7 @@ const Sidebar = () => {
             <li className="nav-text">
               <Link to="/visits">
                 <IoIcons.IoIosPaper />
-                <span>Visits</span>
+                <span>Last Visited</span>
               </Link>
             </li>
 
