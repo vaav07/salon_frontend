@@ -4,26 +4,54 @@ import useAuthContext from "../context/AuthContext";
 import AsyncSelect from "react-select/async";
 import Select from "react-select";
 import { useForm, Controller } from "react-hook-form";
+import FormModal from "./FormModal";
 
 function AutocompleteSearchBox() {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  const [selectedResult, setSelectedResult] = useState(null);
+  // const [selectedResult, setSelectedResult] = useState(null);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [showForm, setShowForm] = useState(true);
   const [totalPrice, setTotalPrice] = useState(0);
   const [invoice, setInvoice] = useState({});
+  console.log("total", totalPrice);
+  let [isOpen, setIsOpen] = useState(false);
+
+  const fromSale = "fromSale";
+
+  function closeModal() {
+    setIsOpen(false);
+  }
+
+  function openModal() {
+    setIsOpen(true);
+    setSearchTerm("");
+  }
   // const [employeeData, setEmployeeData] = useState([]);
 
   const { control, handleSubmit, register, reset } = useForm();
 
-  const { http, config, userId } = useAuthContext();
+  const { http, config, userId, user, selectedResult, setSelectedResult } =
+    useAuthContext();
+  let localUser = JSON.parse(user);
+  console.log("Selected Result", selectedResult);
+  console.log("Admin", localUser.admin_id);
 
   const paymentOptions = [
     { value: "upi", label: "UPI" },
     { value: "cash", label: "CASH" },
     { value: "card", label: "CARD" },
   ];
+
+  const [showButton, setShowButton] = useState(false);
+
+  useEffect(() => {
+    const delay = setTimeout(() => {
+      setShowButton(searchTerm && searchResults.length <= 2);
+    }, 1000);
+
+    return () => clearTimeout(delay);
+  }, [searchTerm, searchResults]);
 
   useEffect(() => {
     // Call your search API endpoint with the searchTerm
@@ -43,6 +71,7 @@ function AutocompleteSearchBox() {
     } else {
       setSearchResults([]);
     }
+
     // loadEmployee();
   }, [searchTerm]);
 
@@ -56,6 +85,10 @@ function AutocompleteSearchBox() {
     setSelectedResult(result);
     setSearchTerm("");
     setFormSubmitted(false);
+  }
+
+  function handlePriceChange(e) {
+    setTotalPrice(e.target.value);
   }
 
   function getCurrentDate() {
@@ -85,8 +118,8 @@ function AutocompleteSearchBox() {
     // "services": [1,2]
 
     const formattedData = {
-      admin_id: userId,
-      user_id: userId,
+      admin_id: selectedResult.admin_id,
+      user_id: selectedResult.user_id,
       customer_id: selectedResult.id,
       employee_id: data.employee_id.value,
       services: data.selectedOptions.map((option) => option.value),
@@ -217,167 +250,188 @@ function AutocompleteSearchBox() {
   }
 
   return (
-    <div className="container px-4  sm:w-1/2 mx-auto">
-      <div className="my-2">
-        {!selectedResult && (
-          <input
-            className="w-full py-1 px-2"
-            type="text"
-            value={searchTerm}
-            onChange={handleInputChange}
-            placeholder="Search"
-          />
-        )}
-
-        {searchResults.map((result) => (
-          <div
-            className="mt-1 py-1 px-2 rounded-sm bg-slate-300 flex cursor-pointer hover:bg-slate-400"
-            key={result.id}
-            onClick={() => handleResultClick(result)}
-          >
-            {result.fullname} {result.phone_no}
-          </div>
-        ))}
-      </div>
-
-      <div className="mt-6">
-        {showForm && (
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            {selectedResult && (
-              <div className="space-y-3">
-                <div className="flex  space-x-3">
-                  <label htmlFor="name" className="w-1/3">
-                    Name
-                  </label>
-                  <input
-                    className="w-2/3 border border-gray-400 rounded-lg px-2 py-1"
-                    type="text"
-                    id="name"
-                    {...register("name")}
-                    value={selectedResult.fullname}
-                  />
+    <>
+      <div className="container px-2  sm:w-1/2 mx-auto">
+        <div className="my-2">
+          {!selectedResult && (
+            <div className="flex">
+              <input
+                className="w-80 py-1 px-2"
+                type="text"
+                value={searchTerm}
+                onChange={handleInputChange}
+                placeholder="Search"
+              />
+              {searchResults.length <= 2 && showButton && (
+                <div className="">
+                  <button
+                    onClick={openModal}
+                    className="ml-2 py-1 px-2 rounded-sm bg-purple-300 hover:bg-purple-400"
+                  >
+                    Add Customer
+                  </button>
                 </div>
-                <div className=" flex space-x-3">
-                  <label className="w-1/3" htmlFor="email">
-                    Email
-                  </label>
-                  <input
-                    className="w-2/3 border border-gray-400 rounded-lg px-2 py-1"
-                    type="email"
-                    id="email"
-                    {...register("email")}
-                    value={selectedResult.email}
-                  />
+              )}
+            </div>
+          )}
+
+          {searchResults.map((result) => (
+            <div
+              className="mt-1 py-1 px-2 w-80 rounded-sm bg-slate-300 flex cursor-pointer hover:bg-slate-400"
+              key={result.id}
+              onClick={() => handleResultClick(result)}
+            >
+              {result.fullname} {result.phone_no}
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-6">
+          {showForm && (
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+              {selectedResult && (
+                <div className="space-y-3">
+                  <div className="flex  space-x-3">
+                    <label htmlFor="name" className="w-1/3">
+                      Name
+                    </label>
+                    <input
+                      className="w-2/3 border border-gray-400 rounded-lg px-2 py-1"
+                      type="text"
+                      id="name"
+                      {...register("name")}
+                      value={selectedResult.fullname}
+                    />
+                  </div>
+                  <div className=" flex space-x-3">
+                    <label className="w-1/3" htmlFor="email">
+                      Email
+                    </label>
+                    <input
+                      className="w-2/3 border border-gray-400 rounded-lg px-2 py-1"
+                      type="email"
+                      id="email"
+                      {...register("email")}
+                      value={selectedResult.email}
+                    />
+                  </div>
+
+                  <div className="flex space-x-3">
+                    <p className="w-1/3">Service Type</p>
+
+                    <Controller
+                      name="selectedOptions"
+                      control={control}
+                      defaultValue={[]}
+                      render={({ field }) => (
+                        <AsyncSelect
+                          {...field}
+                          isMulti
+                          cacheOptions
+                          defaultOptions
+                          loadOptions={loadOptions}
+                          className="w-2/3 border border-gray-400 rounded-lg"
+                          onChange={(selectedOptions) => {
+                            field.onChange(selectedOptions); // Update the value of the field object
+                            // console.log("first", selectedOptions);
+                            let price = selectedOptions.map(
+                              (option) => option.price
+                            );
+                            const total = price.reduce(
+                              (accumulator, currentValue) =>
+                                accumulator + currentValue,
+                              0
+                            );
+                            setTotalPrice(total);
+                          }}
+                        />
+                      )}
+                    />
+                  </div>
+
+                  <div className="flex space-x-3">
+                    <label htmlFor="" className="w-1/3">
+                      Employee Name
+                    </label>
+
+                    <Controller
+                      name="employee_id"
+                      control={control}
+                      render={({ field }) => (
+                        <AsyncSelect
+                          className="w-2/3 border border-gray-400 rounded-lg"
+                          {...field}
+                          cacheOptions
+                          defaultOptions
+                          isSearchable
+                          loadOptions={promiseOptions}
+                        />
+                      )}
+                    />
+                  </div>
+
+                  <div className="flex  space-x-3">
+                    <label htmlFor="name" className="w-1/3">
+                      Payment Method
+                    </label>
+                    <Controller
+                      name="payment_method"
+                      control={control}
+                      // rules={{ required: 'Payment Method is required' }}
+                      render={({ field }) => (
+                        <Select
+                          className="w-2/3 border border-gray-400 rounded-lg text-sm"
+                          {...field}
+                          options={paymentOptions}
+                          isClearable
+                          placeholder="Select Payment Method"
+                        />
+                      )}
+                    />
+                  </div>
+
+                  <div className="flex space-x-3">
+                    <label htmlFor="" className="w-1/3">
+                      Price
+                    </label>
+                    <input
+                      className="w-2/3  border-gray-400 rounded-lg px-2 py-1"
+                      type="number"
+                      {...register("price")}
+                      value={totalPrice}
+                      onChange={handlePriceChange}
+                    />
+                  </div>
                 </div>
+              )}
 
-                <div className="flex space-x-3">
-                  <p className="w-1/3">Service Type</p>
-
-                  <Controller
-                    name="selectedOptions"
-                    control={control}
-                    defaultValue={[]}
-                    render={({ field }) => (
-                      <AsyncSelect
-                        {...field}
-                        isMulti
-                        cacheOptions
-                        defaultOptions
-                        loadOptions={loadOptions}
-                        className="w-2/3 border border-gray-400 rounded-lg"
-                        onChange={(selectedOptions) => {
-                          field.onChange(selectedOptions); // Update the value of the field object
-                          // console.log("first", selectedOptions);
-                          let price = selectedOptions.map(
-                            (option) => option.price
-                          );
-                          const total = price.reduce(
-                            (accumulator, currentValue) =>
-                              accumulator + currentValue,
-                            0
-                          );
-                          setTotalPrice(total);
-                        }}
-                      />
-                    )}
-                  />
-                </div>
-
-                <div className="flex space-x-3">
-                  <label htmlFor="" className="w-1/3">
-                    Employee Name
-                  </label>
-
-                  <Controller
-                    name="employee_id"
-                    control={control}
-                    render={({ field }) => (
-                      <AsyncSelect
-                        className="w-2/3 border border-gray-400 rounded-lg"
-                        {...field}
-                        cacheOptions
-                        defaultOptions
-                        isSearchable
-                        loadOptions={promiseOptions}
-                      />
-                    )}
-                  />
-                </div>
-
-                <div className="flex  space-x-3">
-                  <label htmlFor="name" className="w-1/3">
-                    Payment Method
-                  </label>
-                  <Controller
-                    name="payment_method"
-                    control={control}
-                    // rules={{ required: 'Payment Method is required' }}
-                    render={({ field }) => (
-                      <Select
-                        className="w-2/3 border border-gray-400 rounded-lg text-sm"
-                        {...field}
-                        options={paymentOptions}
-                        isClearable
-                        placeholder="Select Payment Method"
-                      />
-                    )}
-                  />
-                </div>
-
-                <div className="flex space-x-3">
-                  <label htmlFor="" className="w-1/3">
-                    Price
-                  </label>
-                  <input
-                    className="w-2/3  border-gray-400 rounded-lg px-2 py-1"
-                    type="number"
-                    {...register("price")}
-                    value={totalPrice}
-                    disabled
-                  />
-                </div>
-              </div>
-            )}
-
-            {/* {searchResults.map((result) => (
+              {/* {searchResults.map((result) => (
             <div key={result.id} onClick={() => handleResultClick(result)}>
               {result.firstName}
             </div>
           ))} */}
-            {selectedResult && (
-              <button
-                type="submit"
-                className=" bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              >
-                Submit
-              </button>
-            )}
-          </form>
-        )}
+              {selectedResult && (
+                <button
+                  type="submit"
+                  className=" bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                >
+                  Submit
+                </button>
+              )}
+            </form>
+          )}
 
-        {renderInvoice()}
+          {renderInvoice()}
+        </div>
       </div>
-    </div>
+
+      <FormModal
+        closeModal={closeModal}
+        isOpen={isOpen}
+        header="Customer"
+        fromSale={fromSale}
+      />
+    </>
   );
 }
 

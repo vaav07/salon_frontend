@@ -1,29 +1,27 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ListDetails from "../components/ListDetails";
 import Sidebar from "../components/Sidebar";
 import FormModal from "../components/FormModal";
 import ViewDetails from "../components/ViewDetails";
 import useAuthContext from "../context/AuthContext";
+import { useQuery } from "@tanstack/react-query";
 
 const EmployeeDetails = () => {
   const { http, userId, config } = useAuthContext();
 
   let [isOpen, setIsOpen] = useState(false);
   const [viewModal, setViewModal] = useState(false);
-  const [employees, setEmployees] = useState([]);
 
   const [specificEmployee, setSpecificEmployee] = useState({});
 
-  const getEmployees = async () => {
-    try {
-      const response = await http.get(`/api/getemployees/${userId}`, config);
-      const data = response.data.result;
-      setEmployees(data);
-      // console.log(data);
-    } catch (error) {
-      console.error(error);
-    }
+  const getEmployeeList = async () => {
+    return await http.get(`/api/getemployees/${userId}`, config);
   };
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["employeeList"],
+    queryFn: getEmployeeList,
+  });
 
   const getSpecificEmployee = async (id) => {
     try {
@@ -35,11 +33,6 @@ const EmployeeDetails = () => {
       console.error(error);
     }
   };
-
-  useEffect(() => {
-    getEmployees();
-    // getUser();
-  }, []);
 
   function closeModal() {
     setIsOpen(false);
@@ -56,13 +49,18 @@ const EmployeeDetails = () => {
 
         <div className=" max-w-5xl m-auto">
           <h1 className="py-6 text-2xl font-bold">EMPLOYEE DETAILS</h1>
-          <ListDetails
-            openModal={openModal}
-            setViewModal={setViewModal}
-            data={employees}
-            header="Employee"
-            getSpecificData={getSpecificEmployee}
-          />
+
+          {isLoading ? (
+            <h3>Loading...</h3>
+          ) : (
+            <ListDetails
+              openModal={openModal}
+              setViewModal={setViewModal}
+              data={data.data.result}
+              header="Employee"
+              getSpecificData={getSpecificEmployee}
+            />
+          )}
         </div>
       </div>
 

@@ -12,10 +12,13 @@ import Services from "./pages/Services";
 // import Settings from "./pages/Settings";
 import AuthLayout from "./layouts/AuthLayout";
 import AdminPage from "./pages/Admin/AdminPage";
-import AdminDashboard from "./pages/Admin/AdminDashboard";
+
 import AdminAuthLayout from "./layouts/AdminAuthLayout";
 
 import LastVisted from "./pages/LastVisited";
+import AdminDashboard from "./pages/Admin/pages/AdminDashboard";
+import AdminReports from "./pages/Admin/pages/AdminReports";
+import Visits from "./pages/Visits";
 // import PraticeComp from "./components/PraticeComp";
 
 function App() {
@@ -31,9 +34,10 @@ function App() {
         {/* <Route path="/pratice" element={<PraticeComp />} /> */}
 
         {/* Admin Routes */}
-        <Route element={<AdminAuthLayout />}>
+        {/* <Route element={<AdminAuthLayout />}>
           <Route path="/adminDash" element={<AdminDashboard />} />
-        </Route>
+          <Route path="/adminReports" element={<AdminReports />} />
+        </Route> */}
 
         <Route element={<AuthLayout />}>
           {/* <Sidebar /> */}
@@ -43,7 +47,8 @@ function App() {
           <Route path="/services" element={<Services />} />
           <Route path="/employee" element={<EmployeeDetails />} />
           <Route path="/sales" element={<Sales />} />
-          <Route path="/visits" element={<LastVisted />} />
+          <Route path="/lastvisits" element={<LastVisted />} />
+          <Route path="/visits" element={<Visits />} />
 
           {/* <Route path="/settings" element={<Settings />} /> */}
         </Route>

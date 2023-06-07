@@ -7,12 +7,15 @@ const AuthContext = createContext({});
 export const AuthProvider = ({ children }) => {
   const { http } = AuthUser();
 
-  const [token, setToken] = useState(sessionStorage.getItem("token"));
-  const [user, setUser] = useState(sessionStorage.getItem("user"));
-  const [userId, setUserId] = useState(sessionStorage.getItem("userId"));
-  const [admin, setAdmin] = useState(sessionStorage.getItem("admin"));
-  const [adminId, setAdminId] = useState(sessionStorage.getItem("adminId"));
+  const [token, setToken] = useState(localStorage.getItem("token"));
+  const [user, setUser] = useState(localStorage.getItem("user"));
+  const [userId, setUserId] = useState(localStorage.getItem("userId"));
+  const [admin, setAdmin] = useState(localStorage.getItem("admin"));
+  const [adminId, setAdminId] = useState(localStorage.getItem("adminId"));
   const [errors, setErrors] = useState([]);
+
+  const [selectedResult, setSelectedResult] = useState(null);
+  const [searchResults, setSearchResults] = useState([]);
 
   const navigate = useNavigate();
 
@@ -59,12 +62,12 @@ export const AuthProvider = ({ children }) => {
         "Cache-Control": "no-cache",
       });
       const token = response.data.access_token;
-      sessionStorage.setItem("token", token);
+      localStorage.setItem("token", token);
       setToken(token);
-      sessionStorage.setItem("user", JSON.stringify(response.data.user));
+      localStorage.setItem("user", JSON.stringify(response.data.user));
       setUser(JSON.stringify(response.data.user));
 
-      sessionStorage.setItem("userId", response.data.user.id);
+      localStorage.setItem("userId", response.data.user.id);
       setUserId(response.data.user.id);
       navigate("/");
     } catch (e) {
@@ -82,11 +85,11 @@ export const AuthProvider = ({ children }) => {
         "Cache-Control": "no-cache",
       });
       const token = response.data.access_token;
-      sessionStorage.setItem("token", token);
+      localStorage.setItem("token", token);
       setToken(token);
-      sessionStorage.setItem("admin", JSON.stringify(response.data.user));
+      localStorage.setItem("admin", JSON.stringify(response.data.user));
       setAdmin(JSON.stringify(response.data.user));
-      sessionStorage.setItem("adminId", response.data.user.id);
+      localStorage.setItem("adminId", response.data.user.id);
       setAdminId(response.data.user.id);
       navigate("/adminDash");
     } catch (e) {
@@ -105,9 +108,9 @@ export const AuthProvider = ({ children }) => {
         },
       });
 
-      sessionStorage.removeItem("token");
-      sessionStorage.removeItem("user");
-      sessionStorage.removeItem("userId");
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      localStorage.removeItem("userId");
       navigate("/login");
       // window.location.reload();
     } catch (error) {
@@ -123,9 +126,9 @@ export const AuthProvider = ({ children }) => {
         },
       });
 
-      sessionStorage.removeItem("token");
-      sessionStorage.removeItem("admin");
-      sessionStorage.removeItem("adminId");
+      localStorage.removeItem("token");
+      localStorage.removeItem("admin");
+      localStorage.removeItem("adminId");
       navigate("/admin");
       // window.location.reload();
     } catch (error) {
@@ -158,6 +161,10 @@ export const AuthProvider = ({ children }) => {
         logout,
         adminLogin,
         adminLogout,
+        selectedResult,
+        setSelectedResult,
+        searchResults,
+        setSearchResults,
       }}
     >
       {children}

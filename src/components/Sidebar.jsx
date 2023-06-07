@@ -98,9 +98,16 @@ const Sidebar = () => {
             </li>
 
             <li className="nav-text">
-              <Link to="/visits">
+              <Link to="/lastvisits">
                 <IoIcons.IoIosPaper />
                 <span>Last Visited</span>
+              </Link>
+            </li>
+
+            <li className="nav-text">
+              <Link to="/visits">
+                <IoIcons.IoIosPaper />
+                <span>Visits</span>
               </Link>
             </li>
 

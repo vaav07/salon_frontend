@@ -1,15 +1,18 @@
 /* eslint-disable react/prop-types */
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 import useAuthContext from "../context/AuthContext";
 
-const FormModal = ({ isOpen, closeModal, header }) => {
+const FormModal = ({ isOpen, closeModal, header, fromSale }) => {
   //   console.log("MOdal", isOpenF);
-  const { http, user, token } = useAuthContext();
+  const { http, user, setSelectedResult, selectedResult, config } =
+    useAuthContext();
 
   const storedData = JSON.parse(user);
+
+  // const [response, setResponse] = useState(null);
 
   //need to change customer fullname to only fullname reminder
   const form = useForm({
@@ -33,22 +36,31 @@ const FormModal = ({ isOpen, closeModal, header }) => {
   const { errors } = formState;
 
   const onSubmit = (data) => {
+    setSelectedResult(data);
     // console.log("form submitted", data);
-    if (header === "Customer") {
-      http.post(`/api/addcustomer`, data, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+    if (header === "Customer" && fromSale === "fromSale") {
+      http
+        .post(`/api/addcustomer`, data, config)
+        .then((response) => {
+          console.log("Posted Customer ID", response.data.Customer_ID);
+
+          setSelectedResult((prevSelectedResult) => ({
+            ...prevSelectedResult,
+            id: response.data.Customer_ID,
+          }));
+          console.log("selectedResult1", selectedResult);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+
+      console.log("selectedResult0", selectedResult);
+    } else if (header === "Customer") {
+      http.post(`/api/addcustomer`, data, config);
     } else {
-      http.post(`/api/addemployee`, data, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      http.post(`/api/addemployee`, data, config);
     }
+    closeModal();
     reset();
   };
   return (
@@ -156,16 +168,17 @@ const FormModal = ({ isOpen, closeModal, header }) => {
                             <div className="mt-1">
                               <input
                                 type="tel"
+                                maxLength="10"
                                 // pattern="/(7|8|9)\d{9}/"
                                 {...register("phone_no", {
                                   required: {
                                     value: true,
                                     message: "phone is required",
                                   },
-                                  // pattern: {
-                                  //   value: /(7|8|9)\d{9}/,
-                                  //   message: "Invalid Phone number",
-                                  // },
+                                  pattern: {
+                                    value: /(7|8|9)\d{9}/,
+                                    message: "Invalid Phone number",
+                                  },
                                 })}
                                 id="phone_no"
                                 autoComplete="phone_no"
@@ -187,6 +200,7 @@ const FormModal = ({ isOpen, closeModal, header }) => {
                             <div className="mt-1">
                               <input
                                 type="tel"
+                                maxLength="10"
                                 pattern="/(7|8|9)\d{9}/"
                                 {...register("alt_phone_no")}
                                 id="alt_phone_no"
