@@ -138,10 +138,10 @@ const FormModal = ({ isOpen, closeModal, header, fromSale }) => {
                               <input
                                 id="email"
                                 {...register("email", {
-                                  required: {
-                                    value: true,
-                                    message: "email is required",
-                                  },
+                                  // required: {
+                                  //   value: true,
+                                  //   message: "email is required",
+                                  // },
                                   pattern: {
                                     value:
                                       /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/,
@@ -171,10 +171,10 @@ const FormModal = ({ isOpen, closeModal, header, fromSale }) => {
                                 maxLength="10"
                                 // pattern="/(7|8|9)\d{9}/"
                                 {...register("phone_no", {
-                                  required: {
-                                    value: true,
-                                    message: "phone is required",
-                                  },
+                                  // required: {
+                                  //   value: true,
+                                  //   message: "phone is required",
+                                  // },
                                   pattern: {
                                     value: /(7|8|9)\d{9}/,
                                     message: "Invalid Phone number",
@@ -190,7 +190,7 @@ const FormModal = ({ isOpen, closeModal, header, fromSale }) => {
                             </p>
                           </div>
 
-                          <div className="sm:col-span-3">
+                          {/* <div className="sm:col-span-3">
                             <label
                               htmlFor="alt_phone_no"
                               className="block text-sm font-medium leading-6 text-gray-900"
@@ -208,9 +208,9 @@ const FormModal = ({ isOpen, closeModal, header, fromSale }) => {
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                               />
                             </div>
-                          </div>
+                          </div> */}
 
-                          <div className="col-span-full">
+                          {/* <div className="col-span-full">
                             <label
                               htmlFor="address"
                               className="block text-sm font-medium leading-6 text-gray-900"
@@ -234,9 +234,9 @@ const FormModal = ({ isOpen, closeModal, header, fromSale }) => {
                             <p className="text-xs text-red-600 ml-2 mt-1">
                               {errors.address?.message}
                             </p>
-                          </div>
+                          </div> */}
 
-                          <div className="sm:col-span-2 sm:col-start-1">
+                          {/* <div className="sm:col-span-2 sm:col-start-1">
                             <label
                               htmlFor="state"
                               className="block text-sm font-medium leading-6 text-gray-900"
@@ -338,7 +338,7 @@ const FormModal = ({ isOpen, closeModal, header, fromSale }) => {
                             <p className="text-xs text-red-600 ml-2 mt-1">
                               {errors.dob?.message}
                             </p>
-                          </div>
+                          </div> */}
 
                           <div className="sm:col-span-3">
                             <label
@@ -357,8 +357,8 @@ const FormModal = ({ isOpen, closeModal, header, fromSale }) => {
                                   },
                                 })}
                               >
-                                <option value="female">female</option>
                                 <option value="male">male</option>
+                                <option value="female">female</option>
                                 <option value="other">other</option>
                               </select>
 

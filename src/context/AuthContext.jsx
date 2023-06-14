@@ -61,6 +61,11 @@ export const AuthProvider = ({ children }) => {
       const response = await http.post("/api/login", data, {
         "Cache-Control": "no-cache",
       });
+
+      //       const loginEndpoint = "/api/login"; // Replace with the actual login endpoint used
+      // const userType = loginEndpoint.includes("user") ? "user" : "admin";
+      localStorage.setItem("userType", user);
+
       const token = response.data.access_token;
       localStorage.setItem("token", token);
       setToken(token);
@@ -91,7 +96,10 @@ export const AuthProvider = ({ children }) => {
       setAdmin(JSON.stringify(response.data.user));
       localStorage.setItem("adminId", response.data.user.id);
       setAdminId(response.data.user.id);
-      navigate("/adminDash");
+      const loginEndpoint = "/api/admin/login"; // Replace with the actual login endpoint used
+      const userType = loginEndpoint.includes("user") ? "user" : "admin";
+      localStorage.setItem("userType", userType);
+      navigate("/admin/dashboard");
     } catch (e) {
       //need to fix this
       if (e.response.status === 422) {
@@ -111,6 +119,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
       localStorage.removeItem("userId");
+      localStorage.removeItem("userType");
       navigate("/login");
       // window.location.reload();
     } catch (error) {
@@ -129,6 +138,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.removeItem("token");
       localStorage.removeItem("admin");
       localStorage.removeItem("adminId");
+      localStorage.removeItem("userType");
       navigate("/admin");
       // window.location.reload();
     } catch (error) {
@@ -148,6 +158,7 @@ export const AuthProvider = ({ children }) => {
       value={{
         config,
         http,
+
         user,
         userId,
         admin,

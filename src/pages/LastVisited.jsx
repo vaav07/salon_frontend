@@ -1,10 +1,10 @@
 /* eslint-disable react/jsx-key */
-import Sidebar from "../components/Sidebar";
 import { useMemo } from "react";
 import { usePagination, useSortBy, useTable } from "react-table";
 
 import useAuthContext from "../context/AuthContext";
 import { useState, useEffect } from "react";
+import UserLayout from "../layouts/UserLayout";
 
 const LastVisted = () => {
   const { http, config, userId } = useAuthContext();
@@ -70,21 +70,21 @@ const LastVisted = () => {
     nextPage,
     canPreviousPage,
     canNextPage,
-    // pageOptions,
-    // state,
-    // gotoPage,
-    // pageCount,
+    pageOptions,
+    state,
+    gotoPage,
+    pageCount,
     prepareRow,
   } = tableInstance;
 
-  // const { pageIndex } = state;
+  const { pageIndex } = state;
 
   return (
-    <>
+    <UserLayout>
       <div className="bg-zinc-200">
-        <Sidebar />
+        {/* <Sidebar /> */}
         <div className=" max-w-5xl m-auto">
-          <h1 className="pt-6 text-2xl font-bold">Visits</h1>
+          <h1 className="pt-6 text-2xl font-bold">Last Visits</h1>
           <div className="space-x-2 text-center">
             <button
               className={`w-20  ${
@@ -143,7 +143,7 @@ const LastVisted = () => {
           </div>
 
           <section className="py-1 bg-blueGray-50">
-            <div className="w-full px-4 mx-auto mt-12">
+            <div className="w-full px-4 mx-auto mt-6">
               <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-white ">
                 <div className="rounded-t mb-0 px-4 py-3 border-0">
                   <div className="flex flex-wrap items-center">
@@ -211,6 +211,26 @@ const LastVisted = () => {
                 Prev
               </button>
               <button
+                className="disabled:opacity-25"
+                onClick={() => gotoPage(0)}
+                disabled={!canPreviousPage}
+              >
+                {"<<"}
+              </button>
+              <span>
+                Page{" "}
+                <strong>
+                  {pageIndex + 1} of {pageOptions.length}
+                </strong>
+              </span>
+              <button
+                className="disabled:opacity-25"
+                onClick={() => gotoPage(pageCount - 1)}
+                disabled={!canNextPage}
+              >
+                {">>"}
+              </button>
+              <button
                 className="bg-purple-600 px-3 py-1 rounded-lg text-white hover:bg-purple-500 disabled:opacity-25"
                 onClick={() => nextPage()}
                 disabled={!canNextPage}
@@ -221,7 +241,7 @@ const LastVisted = () => {
           </section>
         </div>
       </div>
-    </>
+    </UserLayout>
   );
 };
 

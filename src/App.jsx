@@ -17,8 +17,15 @@ import AdminAuthLayout from "./layouts/AdminAuthLayout";
 
 import LastVisted from "./pages/LastVisited";
 import AdminDashboard from "./pages/Admin/pages/AdminDashboard";
-import AdminReports from "./pages/Admin/pages/AdminReports";
+
+import AdminCustomers from "./pages/Admin/pages/AdminCustomers";
+import AdminEmployees from "./pages/Admin/pages/AdminEmployees";
 import Visits from "./pages/Visits";
+import AdminSales from "./pages/Admin/pages/AdminSales";
+import AdminCreateUser from "./pages/Admin/pages/AdminCreateUser";
+import AdminServices from "./pages/Admin/pages/AdminServices";
+import AdminReports from "./pages/Admin/pages/AdminReports";
+import AdminDailyReports from "./pages/Admin/pages/AdminDailyReports";
 // import PraticeComp from "./components/PraticeComp";
 
 function App() {
@@ -34,10 +41,15 @@ function App() {
         {/* <Route path="/pratice" element={<PraticeComp />} /> */}
 
         {/* Admin Routes */}
-        {/* <Route element={<AdminAuthLayout />}>
-          <Route path="/adminDash" element={<AdminDashboard />} />
-          <Route path="/adminReports" element={<AdminReports />} />
-        </Route> */}
+        <Route element={<AdminAuthLayout />}>
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/customers" element={<AdminCustomers />} />
+          <Route path="/admin/employees" element={<AdminEmployees />} />
+          {/* <Route path="/admin/reports" element={<AdminReports />} /> */}
+          <Route path="/admin/createuser" element={<AdminCreateUser />} />
+          <Route path="/admin/services" element={<AdminServices />} />
+          <Route path="/admin/dailyreports" element={<AdminDailyReports />} />
+        </Route>
 
         <Route element={<AuthLayout />}>
           {/* <Sidebar /> */}

@@ -4,6 +4,7 @@ import Sidebar from "../components/Sidebar";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import Card from "../components/Card";
+import UserLayout from "../layouts/UserLayout";
 
 const Dashboard = () => {
   const { http, user, userId, config } = useAuthContext();
@@ -14,10 +15,9 @@ const Dashboard = () => {
   });
 
   return (
-    <>
+    <UserLayout>
       {user && (
-        <div className=" h-screen">
-          <Sidebar />
+        <div className="">
           <div className=" max-w-5xl mx-auto">
             <h1 className="py-4 text-2xl font-bold">Dashboard</h1>
             {/* <div>{user?.name}</div> */}
@@ -26,16 +26,33 @@ const Dashboard = () => {
               <h3>Loading...</h3>
             ) : (
               <div>
-                <div className="flex justify-between ml-2 items-center">
+                <div className="grid grid-cols-4 gap-4">
                   <Card
-                    name={"OVERALL SALES"}
-                    data={data.data.overallSalesAmount}
+                    name={"TODAY'S SALES"}
+                    data={data.data.todaysOverallSalesAmount}
                   />
-                  <Card name={"CASH AMOUNT"} data={data.data.cashSalesAmount} />
-                  <Card name={"UPI AMOUNT"} data={data.data.upiSalesAmount} />
-                  <Card name={"CARD AMOUNT"} data={data.data.cardSalesAmount} />
+                  <Card
+                    name={"CASH AMOUNT"}
+                    data={data.data.todaysCashSalesAmount}
+                  />
+                  <Card
+                    name={"UPI AMOUNT"}
+                    data={data.data.todaysUpiSalesAmount}
+                  />
+                  <Card
+                    name={"CARD AMOUNT"}
+                    data={data.data.todaysCardSalesAmount}
+                  />
+
+                  {data.data.employeeSalesAmounts.map((item) => (
+                    <Card
+                      key={item.employee_name}
+                      name={item.employee_name}
+                      data={item.salesAmount}
+                    />
+                  ))}
                 </div>
-                <div className="grid md:grid-cols-2 mt-2 ml-[-14px] ">
+                {/* <div className="grid md:grid-cols-2 mt-2 ml-[-14px] ">
                   <Link className="w-full" to="/employee">
                     <DashboardCard
                       item={"EMPLOYEES"}
@@ -60,13 +77,13 @@ const Dashboard = () => {
                       data={data.data.sale_count}
                     />
                   </Link>
-                </div>
+                </div> */}
               </div>
             )}
           </div>
         </div>
       )}
-    </>
+    </UserLayout>
   );
 };
 

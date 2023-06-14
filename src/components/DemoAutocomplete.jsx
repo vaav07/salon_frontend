@@ -43,15 +43,19 @@ function AutocompleteSearchBox() {
     { value: "card", label: "CARD" },
   ];
 
-  const [showButton, setShowButton] = useState(false);
+  // const [showButton, setShowButton] = useState(false);
+
+  // useEffect(() => {
+  //   const delay = setTimeout(() => {
+  //     setShowButton(searchTerm && searchResults.length <= 4);
+  //   }, 1000);
+
+  //   return () => clearTimeout(delay);
+  // }, [searchTerm, searchResults]);
 
   useEffect(() => {
-    const delay = setTimeout(() => {
-      setShowButton(searchTerm && searchResults.length <= 2);
-    }, 1000);
-
-    return () => clearTimeout(delay);
-  }, [searchTerm, searchResults]);
+    setSelectedResult(null);
+  }, []);
 
   useEffect(() => {
     // Call your search API endpoint with the searchTerm
@@ -132,6 +136,7 @@ function AutocompleteSearchBox() {
       //just to show data on next page
       name: data.name,
       email: data.email,
+      employee_name: data.employee_id.label,
       label: data.selectedOptions.map((option) => option.label),
     };
 
@@ -204,48 +209,66 @@ function AutocompleteSearchBox() {
     }
   };
 
+  const handleNewSale = () => {
+    console.log("click");
+    setSearchTerm("");
+    setSelectedResult(null);
+    setFormSubmitted(false);
+    setShowForm(true);
+    setTotalPrice(0);
+    setInvoice({});
+    reset();
+  };
+
   function renderInvoice() {
     if (!selectedResult || !formSubmitted) {
       return null;
     }
 
     return (
-      <div className="p-4 border border-gray-400 rounded-lg">
-        <h2 className="text-lg font-bold mb-4">Invoice</h2>
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <p className="font-bold">Name:</p>
-            <p>
-              {selectedResult.fullname}
-              {/* {selectedResult.lastName} */}
-            </p>
-          </div>
-          <div>
-            <p className="font-bold">Email:</p>
-            <p>{selectedResult.email}</p>
-          </div>
-          {/* Render more form fields as needed */}
-          <div className="col-span-2">
-            <hr className="my-4" />
-            <p className="font-bold">Summary:</p>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <p className="font-semibold">Service Type: </p>
-                <p>{invoice.label.join(", ")}</p>
-
-                {/* Render more summary fields as needed */}
-              </div>
-              {/* <div>
-                <p>Price:</p>
-                <p></p> */}
-              {/* Render more summary fields as needed */}
-              {/* </div> */}
+      <>
+        <div className="p-4 border border-gray-400 rounded-lg shadow-md bg-white">
+          <h2 className="text-lg font-bold mb-4">Invoice</h2>
+          <div className="w-2/3 mx-auto space-y-4">
+            <div>
+              <p className="font-bold">Name:</p>
+              <p>
+                {selectedResult.fullname}
+                {/* {selectedResult.lastName} */}
+              </p>
             </div>
-            <hr className="my-4" />
-            <p className="font-bold">Total: Rs {invoice.total_price}/-</p>
+            <div>
+              <p className="font-bold">Email:</p>
+              <p>{selectedResult.email}</p>
+            </div>
+            <div>
+              <p className="font-bold">Employee Name:</p>
+              <p>{invoice.employee_name}</p>
+            </div>
+
+            <div>
+              <p className="font-bold">Service Types:</p>
+              <p>{invoice.label.join(", ")}</p>
+            </div>
+
+            {/* Render more form fields as needed */}
+            <div className="">
+              <hr className="my-4" />
+              <p className="font-bold text-right">
+                Total: Rs {invoice.total_price}/-
+              </p>
+            </div>
+          </div>
+          <div className="mt-4 text-center">
+            <button
+              className=" bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              onClick={handleNewSale}
+            >
+              New Sale
+            </button>
           </div>
         </div>
-      </div>
+      </>
     );
   }
 
@@ -256,22 +279,22 @@ function AutocompleteSearchBox() {
           {!selectedResult && (
             <div className="flex">
               <input
-                className="w-80 py-1 px-2"
+                className="w-80 py-1 px-2 rounded-sm"
                 type="text"
                 value={searchTerm}
                 onChange={handleInputChange}
                 placeholder="Search"
               />
-              {searchResults.length <= 2 && showButton && (
-                <div className="">
-                  <button
-                    onClick={openModal}
-                    className="ml-2 py-1 px-2 rounded-sm bg-purple-300 hover:bg-purple-400"
-                  >
-                    Add Customer
-                  </button>
-                </div>
-              )}
+              {/* {searchResults.length <= 4 && showButton && ( */}
+              <div className="">
+                <button
+                  onClick={openModal}
+                  className="ml-2 py-1 px-2 rounded-sm bg-purple-300 hover:bg-purple-400"
+                >
+                  Add Customer
+                </button>
+              </div>
+              {/* )} */}
             </div>
           )}
 
@@ -305,14 +328,14 @@ function AutocompleteSearchBox() {
                   </div>
                   <div className=" flex space-x-3">
                     <label className="w-1/3" htmlFor="email">
-                      Email
+                      Phone No
                     </label>
                     <input
                       className="w-2/3 border border-gray-400 rounded-lg px-2 py-1"
-                      type="email"
-                      id="email"
-                      {...register("email")}
-                      value={selectedResult.email}
+                      type="tel"
+                      id="phone"
+                      {...register("phone_no")}
+                      value={selectedResult.phone_no}
                     />
                   </div>
 
@@ -411,12 +434,21 @@ function AutocompleteSearchBox() {
             </div>
           ))} */}
               {selectedResult && (
-                <button
-                  type="submit"
-                  className=" bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                >
-                  Submit
-                </button>
+                <div className="flex justify-between mx-4">
+                  <button
+                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                    onClick={handleNewSale}
+                  >
+                    Back
+                  </button>
+
+                  <button
+                    type="submit"
+                    className=" bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                  >
+                    Submit
+                  </button>
+                </div>
               )}
             </form>
           )}

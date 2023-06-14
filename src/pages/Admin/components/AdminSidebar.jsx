@@ -1,52 +1,139 @@
-import logo from "../../../../src/assets/Deadpool.webp";
+import { Link } from "react-router-dom";
+import { useState } from "react";
+import { IconContext } from "react-icons";
 
-const AdminSidebar = () => {
+import "./AdminSidebar.scss";
+
+import * as FaIcons from "react-icons/fa";
+// import * as AiIcons from "react-icons/ai";
+import * as BiIcons from "react-icons/bi";
+import * as MdIcons from "react-icons/md";
+import * as FcIcons from "react-icons/fc";
+import * as IoIcons from "react-icons/io";
+import * as CgIcons from "react-icons/cg";
+import useAuthContext from "../../../context/AuthContext";
+// import { SidebarData } from "./SidebarData";
+
+const Sidebar = () => {
+  const { adminLogout } = useAuthContext();
+  const [sidebar, setSidebar] = useState(false);
+
+  const showSidebar = () => setSidebar(!sidebar);
+
   return (
-    <div className="flex flex-col h-screen bg-gray-900 text-white w-full">
-      {/* Logo */}
-      <div className="p-4">
-        <img src={logo} alt="Logo" className="w-20 h-20" />
-      </div>
+    <>
+      <IconContext.Provider value={{ color: "#fff" }}>
+        <div className="navbar">
+          <Link to="#" className="menu-bars">
+            {/* <FaIcons.FaBars onClick={showSidebar} /> */}
+          </Link>
+        </div>
+        <nav className={"nav-menu active"}>
+          <ul className="nav-menu-items" onClick={showSidebar}>
+            <li className="navbar-toggle">
+              <Link to="#" className="menu-bars">
+                {/* <AiIcons.AiOutlineClose /> */}
+              </Link>
+            </li>
 
-      {/* Sidebar Content */}
-      <div className="flex-grow">
-        <ul className="flex flex-col py-4">
-          <li className="px-4 py-2">
-            <a href="/" className="text-white">
-              <span className="text-gray-400">Stats</span>
-            </a>
-          </li>
-          <li className="px-4 py-2">
-            <a href="/" className="text-white">
-              <span className="text-gray-400">Employee</span>
-            </a>
-          </li>
-          <li className="px-4 py-2">
-            <a href="/" className="text-white">
-              <span className="text-gray-400">Services</span>
-            </a>
-          </li>
-          <li className="px-4 py-2">
-            <a href="/" className="text-white">
-              <span className="text-gray-400">Customers</span>
-            </a>
-          </li>
-          <li className="px-4 py-2">
-            <a href="/" className="text-white">
-              <span className="text-gray-400">Reports</span>
-            </a>
-          </li>
-        </ul>
-      </div>
+            <li className="">
+              <img
+                className="logo"
+                src={
+                  "https://haztech.in/wp-content/uploads/2020/09/haztechin_logo.png"
+                }
+                alt="logo"
+              />
+            </li>
 
-      {/* Logout Button */}
-      <div className="p-4">
-        <button className="px-4 py-2 bg-red-500 rounded-lg text-white">
-          Logout
-        </button>
-      </div>
-    </div>
+            {/* {SidebarData.map((item, index) => {
+            return (
+              <li key={index} className={item.cName}>
+                <Link to={item.path}>
+                  {item.icon}
+                  <span>{item.title}</span>
+                </Link>
+              </li>
+            );
+          })} */}
+
+            <li className="nav-text">
+              <Link to="/admin/dashboard">
+                <MdIcons.MdDashboard />
+                <span>Dashboard</span>
+              </Link>
+            </li>
+
+            <li className="nav-text">
+              <Link to="/admin/createuser">
+                <MdIcons.MdDashboard />
+                <span>Create user</span>
+              </Link>
+            </li>
+
+            <li className="nav-text">
+              <Link to="/admin/employees">
+                <CgIcons.CgDetailsMore />
+                <span>Employees</span>
+              </Link>
+            </li>
+
+            {/* <li className="nav-text">
+              <Link to="/admin/customers">
+                <BiIcons.BiDetail />
+                <span>Customers</span>
+              </Link>
+            </li> */}
+
+            <li className="nav-text">
+              <Link to="/admin/services">
+                <FaIcons.FaServicestack />
+                <span>Services</span>
+              </Link>
+            </li>
+            {/* <li className="nav-text">
+              <Link to="/admin/sales">
+                <FcIcons.FcSalesPerformance />
+                <span>Sales</span>
+              </Link>
+            </li> */}
+            {/* <li className="nav-text">
+              <Link to="/admin/reports">
+                <IoIcons.IoIosPaper />
+                <span>Reports</span>
+              </Link>
+            </li> */}
+            <li className="nav-text">
+              <Link to="/admin/dailyreports">
+                <IoIcons.IoIosPaper />
+                <span>Daily Reports</span>
+              </Link>
+            </li>
+
+            {/* <li className="nav-text">
+              <Link to="/lastvisits">
+                <IoIcons.IoIosPaper />
+                <span>Last Visited</span>
+              </Link>
+            </li>
+
+            <li className="nav-text">
+              <Link to="/visits">
+                <IoIcons.IoIosPaper />
+                <span>Visits</span>
+              </Link>
+            </li> */}
+
+            <li className="nav-text">
+              <button className="logout-btn" onClick={adminLogout}>
+                Logout
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </IconContext.Provider>
+    </>
   );
 };
 
-export default AdminSidebar;
+export default Sidebar;

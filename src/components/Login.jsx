@@ -4,13 +4,13 @@ import { useState } from "react";
 import useAuthContext from "../context/AuthContext";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const { login, errors } = useAuthContext();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    login({ email, password });
+    login({ username, password });
     // console.log(username, password);
   };
 
@@ -22,24 +22,25 @@ const Login = () => {
             <img
               className="w-48 rounded-md"
               src={
-                "https://img.etimg.com/thumb/msid-69724545,width-650,height-488,imgsize-1032582,,resizemode-75/hugh-jackman-holds-a-guinness-world-record-for-longest-career-as-a-live-action-marvel-superhero-for-his-role-as-wolverine-.jpg"
+                "https://haztech.in/wp-content/uploads/2020/09/haztechin_logo.png"
               }
               alt="logo"
             />
           </div>
+          <h2 className="text-center mt-3 font-bold text-lg">Store Login</h2>
           <form onSubmit={handleLogin} className="space-y-5 mt-10">
             <div>
               <input
                 className="py-3 px-2 w-full border-b border-black rounded-md"
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Email"
+                id="username"
+                type="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="username"
               />
-              {errors.email && (
+              {errors.username && (
                 <div>
-                  <span>{errors.email[0]}</span>
+                  <span>{errors.username[0]}</span>
                 </div>
               )}
             </div>

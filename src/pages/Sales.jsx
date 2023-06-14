@@ -1,13 +1,13 @@
 // import axios from "axios";
 import AutocompleteSearchBox from "../components/DemoAutocomplete";
 
-import Sidebar from "../components/Sidebar";
+import UserLayout from "../layouts/UserLayout";
 
 const Sales = () => {
   return (
-    <>
+    <UserLayout>
       <div className="bg-zinc-200 ">
-        <Sidebar />
+        {/* <Sidebar /> */}
         <div className=" max-w-5xl m-auto">
           <div>
             <h1 className="py-6 text-2xl font-bold ">Sales</h1>
@@ -18,7 +18,7 @@ const Sales = () => {
           </div>
         </div>
       </div>
-    </>
+    </UserLayout>
   );
 };
 

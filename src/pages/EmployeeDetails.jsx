@@ -1,10 +1,11 @@
-import { useState } from "react";
-import ListDetails from "../components/ListDetails";
-import Sidebar from "../components/Sidebar";
+/* eslint-disable react/prop-types */
+import { useMemo, useState } from "react";
 import FormModal from "../components/FormModal";
 import ViewDetails from "../components/ViewDetails";
 import useAuthContext from "../context/AuthContext";
 import { useQuery } from "@tanstack/react-query";
+import Table from "../components/Table";
+import UserLayout from "../layouts/UserLayout";
 
 const EmployeeDetails = () => {
   const { http, userId, config } = useAuthContext();
@@ -42,24 +43,90 @@ const EmployeeDetails = () => {
   function openModal() {
     setIsOpen(true);
   }
+
+  const handleButtonClick = (id) => {
+    // Use the id value for further processing
+    console.log("Button clicked for ID:", id);
+    // Perform additional actions with the id value
+    setViewModal(true);
+    openModal();
+    getSpecificEmployee(id);
+  };
+
+  const columns = useMemo(
+    () => [
+      {
+        Header: "No.",
+        accessor: "",
+        Cell: ({ row }) => {
+          const { index } = row;
+          return <span>{index + 1}</span>;
+        },
+      },
+
+      {
+        Header: "Employee Name",
+        accessor: "fullname",
+      },
+      {
+        Header: "Email",
+        accessor: "email",
+      },
+      {
+        Header: "Phone",
+        accessor: "phone_no",
+      },
+      {
+        Header: "Gender",
+        accessor: "gender",
+      },
+      {
+        Header: "",
+        accessor: "id",
+        Cell: ({ value }) => (
+          <button
+            className="bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold py-1 px-2 rounded"
+            onClick={() => handleButtonClick(value)}
+          >
+            View
+          </button>
+        ),
+      },
+    ],
+    []
+  );
+
+  const employeeData = useMemo(() => data?.data?.result, [data?.data?.result]);
   return (
-    <>
-      <div className="bg-zinc-200 h-screen">
-        <Sidebar />
+    <UserLayout>
+      <div className="bg-zinc-200">
+        {/* <Sidebar /> */}
 
         <div className=" max-w-5xl m-auto">
-          <h1 className="py-6 text-2xl font-bold">EMPLOYEE DETAILS</h1>
+          <div className="flex justify-between items-center mx-4">
+            <h1 className="py-6 text-2xl font-bold">Employee DETAILS</h1>
+            <div>
+              <button
+                onClick={openModal}
+                className="  rounded-lg px-3 py-1 bg-gradient-to-r bg-purple-400  hover:from-purple-600 hover:to-purple-500"
+              >
+                Add Employee
+                {/* {header} */}
+              </button>
+            </div>
+          </div>
 
           {isLoading ? (
             <h3>Loading...</h3>
           ) : (
-            <ListDetails
-              openModal={openModal}
-              setViewModal={setViewModal}
-              data={data.data.result}
-              header="Employee"
-              getSpecificData={getSpecificEmployee}
-            />
+            // <ListDetails
+            //   openModal={openModal}
+            //   setViewModal={setViewModal}
+            //   data={data.data.result}
+            //   header="Employee"
+            //   getSpecificData={getSpecificEmployee}
+            // />
+            <Table columns={columns} data={employeeData} header="Employee" />
           )}
         </div>
       </div>
@@ -76,7 +143,7 @@ const EmployeeDetails = () => {
       {!viewModal && (
         <FormModal closeModal={closeModal} isOpen={isOpen} header="Employee" />
       )}
-    </>
+    </UserLayout>
   );
 };
 

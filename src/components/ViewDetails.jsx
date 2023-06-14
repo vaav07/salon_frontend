@@ -23,12 +23,12 @@ const ViewDetails = ({
       fullname: specificData.fullname,
       email: specificData.email,
       phone_no: specificData.phone_no,
-      alt_phone_no: specificData.alt_phone_no,
-      address: specificData.address,
-      state: specificData.state,
-      city: specificData.city,
-      pincode: specificData.pincode,
-      dob: specificData.dob,
+      // alt_phone_no: specificData.alt_phone_no,
+      // address: specificData.address,
+      // state: specificData.state,
+      // city: specificData.city,
+      // pincode: specificData.pincode,
+      // dob: specificData.dob,
       gender: specificData.gender,
       date_of_joining: specificData.date_of_joining,
     },
@@ -135,10 +135,10 @@ const ViewDetails = ({
                         <input
                           id="email"
                           {...register("email", {
-                            required: {
-                              value: true,
-                              message: "email is required",
-                            },
+                            // required: {
+                            //   value: true,
+                            //   message: "email is required",
+                            // },
                             pattern: {
                               value:
                                 /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/,
@@ -164,12 +164,13 @@ const ViewDetails = ({
                         <input
                           type="tel"
                           {...register("phone_no", {
-                            required: {
-                              value: true,
-                              message: "phone is required",
-                            },
+                            // required: {
+                            //   value: true,
+                            //   message: "phone is required",
+                            // },
                           })}
                           id="phone_no"
+                          maxLength={10}
                           autoComplete="phone_no"
                           className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"
                         />
@@ -178,7 +179,7 @@ const ViewDetails = ({
                           {errors.phone_no?.message}
                         </p> */}
                       </div>
-                      <div className="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                      {/* <div className="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                         <label
                           htmlFor="alt_phone_no"
                           className="text-sm font-medium leading-6 text-gray-900"
@@ -213,12 +214,12 @@ const ViewDetails = ({
                           id="address"
                           autoComplete="address"
                           className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"
-                        />
+                        /> */}
 
-                        {/* <p className="text-xs text-red-600 ml-2 mt-1">
+                      {/* <p className="text-xs text-red-600 ml-2 mt-1">
                           {errors.address?.message}
                         </p> */}
-                      </div>
+                      {/* </div>
                       <div className="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                         <label
                           htmlFor="state"
@@ -237,12 +238,12 @@ const ViewDetails = ({
                           id="state"
                           autoComplete="state"
                           className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"
-                        />
+                        /> */}
 
-                        {/* <p className="text-xs text-red-600 ml-2 mt-1">
+                      {/* <p className="text-xs text-red-600 ml-2 mt-1">
                           {errors.state?.message}
                         </p> */}
-                      </div>
+                      {/* </div>
                       <div className="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                         <label
                           htmlFor="city"
@@ -261,11 +262,11 @@ const ViewDetails = ({
                           id="city"
                           autoComplete="city"
                           className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"
-                        />
-                        {/* <p className="text-xs text-red-600 ml-2 mt-1">
+                        /> */}
+                      {/* <p className="text-xs text-red-600 ml-2 mt-1">
                           {errors.city?.message}
                         </p> */}
-                      </div>
+                      {/* </div>
                       <div className="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                         <label
                           htmlFor="pincode"
@@ -284,11 +285,11 @@ const ViewDetails = ({
                           id="pincode"
                           autoComplete="pincode"
                           className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"
-                        />
-                        {/* <p className="text-xs text-red-600 ml-2 mt-1">
+                        /> */}
+                      {/* <p className="text-xs text-red-600 ml-2 mt-1">
                           {errors.pincode?.message}
                         </p> */}
-                      </div>
+                      {/* </div>
                       <div className="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                         <label
                           htmlFor="dob"
@@ -307,11 +308,11 @@ const ViewDetails = ({
                           id="dob"
                           autoComplete="dob"
                           className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"
-                        />
-                        {/* <p className="text-xs text-red-600 ml-2 mt-1">
+                        /> */}
+                      {/* <p className="text-xs text-red-600 ml-2 mt-1">
                           {errors.dob?.message}
                         </p> */}
-                      </div>
+                      {/* </div> */}
                       <div className="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                         <label
                           htmlFor="gender"

@@ -6,7 +6,7 @@ import { IconContext } from "react-icons";
 import "./Sidebar.scss";
 
 import * as FaIcons from "react-icons/fa";
-import * as AiIcons from "react-icons/ai";
+// import * as AiIcons from "react-icons/ai";
 import * as BiIcons from "react-icons/bi";
 import * as MdIcons from "react-icons/md";
 import * as FcIcons from "react-icons/fc";
@@ -25,14 +25,14 @@ const Sidebar = () => {
       <IconContext.Provider value={{ color: "#fff" }}>
         <div className="navbar">
           <Link to="#" className="menu-bars">
-            <FaIcons.FaBars onClick={showSidebar} />
+            {/* <FaIcons.FaBars onClick={showSidebar} /> */}
           </Link>
         </div>
-        <nav className={sidebar ? "nav-menu active" : "nav-menu"}>
+        <nav className={"nav-menu active"}>
           <ul className="nav-menu-items" onClick={showSidebar}>
             <li className="navbar-toggle">
               <Link to="#" className="menu-bars">
-                <AiIcons.AiOutlineClose />
+                {/* <AiIcons.AiOutlineClose /> */}
               </Link>
             </li>
 
@@ -40,7 +40,7 @@ const Sidebar = () => {
               <img
                 className="logo"
                 src={
-                  "https://img.etimg.com/thumb/msid-69724545,width-650,height-488,imgsize-1032582,,resizemode-75/hugh-jackman-holds-a-guinness-world-record-for-longest-career-as-a-live-action-marvel-superhero-for-his-role-as-wolverine-.jpg"
+                  "https://haztech.in/wp-content/uploads/2020/09/haztechin_logo.png"
                 }
                 alt="logo"
               />

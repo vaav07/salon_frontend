@@ -1,13 +1,12 @@
-import RadioButtons from "../components/RadioButtons";
 import ReportList from "../components/ReportList";
 // import ReportsList from "../components/ReportsList";
-import Sidebar from "../components/Sidebar";
+import UserLayout from "../layouts/UserLayout";
 
 const Reports = () => {
   return (
-    <>
+    <UserLayout>
       <div className="bg-zinc-200">
-        <Sidebar />
+        {/* <Sidebar /> */}
 
         <div className=" max-w-5xl m-auto">
           <h1 className="pt-5 text-2xl font-bold mb-3">Reports</h1>
@@ -24,7 +23,7 @@ const Reports = () => {
           </div> */}
         </div>
       </div>
-    </>
+    </UserLayout>
   );
 };
 
