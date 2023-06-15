@@ -2,7 +2,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 
 import { useForm } from "react-hook-form";
-import { DevTool } from "@hookform/devtools";
+// import { DevTool } from "@hookform/devtools";
 import useAuthContext from "../context/AuthContext";
 
 const AddServicesModal = ({ isOpen, closeModal }) => {
@@ -16,7 +16,7 @@ const AddServicesModal = ({ isOpen, closeModal }) => {
     },
   });
 
-  const { register, control, handleSubmit, formState } = form;
+  const { register, handleSubmit, formState } = form;
   const { errors } = formState;
 
   const onSubmit = (data) => {
@@ -155,7 +155,7 @@ const AddServicesModal = ({ isOpen, closeModal }) => {
           </div>
         </Dialog>
       </Transition>
-      <DevTool control={control} />
+      {/* <DevTool control={control} /> */}
     </>
   );
 };

@@ -1,6 +1,12 @@
 /* eslint-disable react/jsx-key */
 import { useMemo } from "react";
-import { usePagination, useSortBy, useTable } from "react-table";
+import {
+  usePagination,
+  useSortBy,
+  useTable,
+  // useGlobalFilter,
+  useFilters,
+} from "react-table";
 
 import useAuthContext from "../context/AuthContext";
 import { useState, useEffect } from "react";
@@ -103,6 +109,8 @@ const ReportList = () => {
       columns,
       data,
     },
+    useFilters,
+    // useGlobalFilter,
     useSortBy,
     usePagination
   );
@@ -119,15 +127,34 @@ const ReportList = () => {
     canNextPage,
     pageOptions,
     state,
+    // setGlobalFilter,
+    setFilter,
     gotoPage,
     pageCount,
     prepareRow,
   } = tableInstance;
 
-  const { pageIndex } = state;
+  const { filters, pageIndex } = state;
+
+  const handleFilterChange = (e) => {
+    const value = e.target.value || undefined;
+    setFilter("customer_name", value);
+  };
 
   return (
     <>
+      <div className="relative mb-2">
+        <input
+          type="text"
+          placeholder="Search By Customer Name"
+          className="py-1 pl-4 pr-10 border border-gray-300 rounded-full focus:outline-none focus:border-blue-500"
+          // value={globalFilter || ""}
+          // onChange={(e) => setGlobalFilter(e.target.value)}
+          value={filters[0]?.value || ""}
+          onChange={handleFilterChange}
+        />
+      </div>
+
       <div className="flex justify-between">
         <div className="space-x-2 text-center">
           <button
@@ -149,6 +176,7 @@ const ReportList = () => {
           >
             1 Month
           </button>
+
           <button
             className={`w-20 ${
               selectedButton === 2 ? "bg-purple-500/10" : "bg-white"
