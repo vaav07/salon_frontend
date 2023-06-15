@@ -52,7 +52,7 @@ const Dashboard = () => {
                     />
                   ))}
                 </div>
-                {/* <div className="grid md:grid-cols-2 mt-2 ml-[-14px] ">
+                <div className="grid grid-cols-4 gap-4 ">
                   <Link className="w-full" to="/employee">
                     <DashboardCard
                       item={"EMPLOYEES"}
@@ -77,7 +77,7 @@ const Dashboard = () => {
                       data={data.data.sale_count}
                     />
                   </Link>
-                </div> */}
+                </div>
               </div>
             )}
           </div>
