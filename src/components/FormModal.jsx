@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 import useAuthContext from "../context/AuthContext";
 
-const FormModal = ({ isOpen, closeModal, header, fromSale }) => {
+const FormModal = ({ isOpen, closeModal, header, fromSale, refetch }) => {
   //   console.log("MOdal", isOpenF);
   const { http, user, setSelectedResult, selectedResult, config } =
     useAuthContext();
@@ -42,19 +42,19 @@ const FormModal = ({ isOpen, closeModal, header, fromSale }) => {
       http
         .post(`/api/addcustomer`, data, config)
         .then((response) => {
-          console.log("Posted Customer ID", response.data.Customer_ID);
+          // console.log("Posted Customer ID", response.data.Customer_ID);
 
           setSelectedResult((prevSelectedResult) => ({
             ...prevSelectedResult,
             id: response.data.Customer_ID,
           }));
-          console.log("selectedResult1", selectedResult);
+          // console.log("selectedResult1", selectedResult);
         })
         .catch((error) => {
           console.error(error);
         });
 
-      console.log("selectedResult0", selectedResult);
+      // console.log("selectedResult0", selectedResult);
     } else if (header === "Customer") {
       http.post(`/api/addcustomer`, data, config);
     } else {
@@ -62,6 +62,7 @@ const FormModal = ({ isOpen, closeModal, header, fromSale }) => {
     }
     closeModal();
     reset();
+    refetch();
   };
   return (
     <>

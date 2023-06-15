@@ -12,17 +12,17 @@ const AdminCreateUser = () => {
   const { register, handleSubmit, reset } = form;
 
   const onSubmit = (data) => {
-    console.log("create user", data);
+    // console.log("create user", data);
     http
       .post("api/admin/user/register", data, config)
       .then((response) => {
         reset();
 
-        console.log("Request successful");
+        // console.log("Request successful");
         console.log(response);
       })
       .catch((error) => {
-        console.log("An error occurred");
+        // console.log("An error occurred");
         console.error(error);
       });
   };

@@ -13,7 +13,7 @@ const PraticeComp = () => {
     // getservices
     const response = await http.get(`/api/getservices`, config);
     const data = await response.data.result;
-    console.log("Data", data);
+    // console.log("Data", data);
 
     // Transform the data to match the required format of React Select
     const options = data.map((item) => ({

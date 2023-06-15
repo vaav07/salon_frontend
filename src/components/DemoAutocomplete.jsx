@@ -14,7 +14,7 @@ function AutocompleteSearchBox() {
   const [showForm, setShowForm] = useState(true);
   const [totalPrice, setTotalPrice] = useState(0);
   const [invoice, setInvoice] = useState({});
-  console.log("total", totalPrice);
+  // console.log("total", totalPrice);
   let [isOpen, setIsOpen] = useState(false);
 
   const fromSale = "fromSale";
@@ -34,8 +34,8 @@ function AutocompleteSearchBox() {
   const { http, config, userId, user, selectedResult, setSelectedResult } =
     useAuthContext();
   let localUser = JSON.parse(user);
-  console.log("Selected Result", selectedResult);
-  console.log("Admin", localUser.admin_id);
+  // console.log("Selected Result", selectedResult);
+  // console.log("Admin", localUser.admin_id);
 
   const paymentOptions = [
     { value: "upi", label: "UPI" },
@@ -66,7 +66,7 @@ function AutocompleteSearchBox() {
         config
       );
       setSearchResults(response.data.users);
-      console.log(response.data.users);
+      // console.log(response.data.users);
     }
 
     // Only call the API if searchTerm is not an empty string
@@ -140,11 +140,11 @@ function AutocompleteSearchBox() {
       label: data.selectedOptions.map((option) => option.label),
     };
 
-    console.log("formatted data", formattedData);
+    // console.log("formatted data", formattedData);
 
     try {
       await http.post(`/api/addsale`, formattedData, config);
-      console.log("Data submitted successfully");
+      // console.log("Data submitted successfully");
     } catch (error) {
       console.error("Error creating user:", error.response.data);
     }
@@ -175,7 +175,7 @@ function AutocompleteSearchBox() {
     // Make the API call to fetch the options from the backend
     const response = await http.get(`/api/getservices`, config);
     const data = await response.data.result;
-    console.log("Data", data);
+    // console.log("Data", data);
 
     // Transform the data to match the required format of React Select
     const options = data.map((item) => ({
@@ -191,7 +191,7 @@ function AutocompleteSearchBox() {
     try {
       const response = await http.get(`/api/getemployees/${userId}`, config);
       const data = response.data.result;
-      console.log("Employee", data);
+      // console.log("Employee", data);
 
       const filteredData = data.filter((item) =>
         item.fullname.toLowerCase().includes(inputValue.toLowerCase())
@@ -204,13 +204,13 @@ function AutocompleteSearchBox() {
 
       return options;
     } catch (error) {
-      console.log("Error fetching employee data", error);
+      console.error("Error fetching employee data", error);
       return [];
     }
   };
 
   const handleNewSale = () => {
-    console.log("click");
+    // console.log("click");
     setSearchTerm("");
     setSelectedResult(null);
     setFormSubmitted(false);

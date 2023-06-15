@@ -18,7 +18,7 @@ const CustomerDetails = () => {
     return await http.get(`/api/getcustomers/${userId}`, config);
   };
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: ["customerList"],
     queryFn: getCustomerList,
   });
@@ -138,7 +138,12 @@ const CustomerDetails = () => {
         />
       )}
       {!viewModal && (
-        <FormModal closeModal={closeModal} isOpen={isOpen} header="Customer" />
+        <FormModal
+          closeModal={closeModal}
+          isOpen={isOpen}
+          header="Customer"
+          refetch={refetch}
+        />
       )}
     </UserLayout>
   );

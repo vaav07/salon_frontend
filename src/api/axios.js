@@ -9,7 +9,7 @@ export default axios.create({
   // },
   // withCredentials: true,
 
-  baseURL: process.env.REACT_APP_BACKEND_URL,
+  baseURL: import.meta.env.VITE_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },

@@ -28,13 +28,17 @@ const AdminDashboard = () => {
             <h3 className="mt-2">Loading...</h3>
           ) : (
             <div className="mt-2 grid grid-cols-4 gap-4">
-              {dailySales.data.data.map((item) => (
-                <Card
-                  key={item.username}
-                  name={item.username}
-                  data={item.total_sales}
-                />
-              ))}
+              {dailySales.data.data.length <= 0 ? (
+                <div>No Data</div>
+              ) : (
+                dailySales.data.data.map((item) => (
+                  <Card
+                    key={item.username}
+                    name={item.username}
+                    data={item.total_sales}
+                  />
+                ))
+              )}
             </div>
           )}
         </div>

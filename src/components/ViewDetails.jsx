@@ -42,7 +42,7 @@ const ViewDetails = ({
   };
 
   const onSubmit = (data) => {
-    console.log(data);
+    // console.log(data);
     if (header === "Customer") {
       http.put(`/api/updatespecificCustomer/${specificData.id}`, data, {
         headers: {
@@ -57,6 +57,7 @@ const ViewDetails = ({
         },
       });
     }
+    closeModal();
   };
 
   return (

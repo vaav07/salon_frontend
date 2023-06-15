@@ -21,7 +21,7 @@ import AdminDashboard from "./pages/Admin/pages/AdminDashboard";
 import AdminCustomers from "./pages/Admin/pages/AdminCustomers";
 import AdminEmployees from "./pages/Admin/pages/AdminEmployees";
 import Visits from "./pages/Visits";
-import AdminSales from "./pages/Admin/pages/AdminSales";
+
 import AdminCreateUser from "./pages/Admin/pages/AdminCreateUser";
 import AdminServices from "./pages/Admin/pages/AdminServices";
 import AdminReports from "./pages/Admin/pages/AdminReports";

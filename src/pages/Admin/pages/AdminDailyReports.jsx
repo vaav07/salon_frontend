@@ -10,7 +10,7 @@ const AdminDailyReports = () => {
   const { http, admin, adminId, config } = useAuthContext();
 
   const handleSubmit = async (e) => {
-    console.log(date);
+    // console.log(date);
     e.preventDefault();
     const response = await http.get(
       `/api/admin/${adminId}/select-sales-date/${date}`,

@@ -2,8 +2,8 @@ import axios from "axios";
 
 const AuthUser = () => {
   const http = axios.create({
-    baseURL: "http://localhost:8000",
-    // baseURL: "https://commcop.in/salon",
+    baseURL: import.meta.env.VITE_BASE_URL,
+
     headers: {
       "Content-Type": "application/json",
     },
@@ -71,7 +71,7 @@ const AuthUser = () => {
           Authorization: `Bearer ${session}`,
         },
       });
-      console.log("refresh", response.data);
+      // console.log("refresh", response.data);
       const { access_token } = response.data;
 
       if (!access_token) {

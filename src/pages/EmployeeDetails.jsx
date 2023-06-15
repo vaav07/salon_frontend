@@ -19,7 +19,7 @@ const EmployeeDetails = () => {
     return await http.get(`/api/getemployees/${userId}`, config);
   };
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: ["employeeList"],
     queryFn: getEmployeeList,
   });
@@ -46,7 +46,7 @@ const EmployeeDetails = () => {
 
   const handleButtonClick = (id) => {
     // Use the id value for further processing
-    console.log("Button clicked for ID:", id);
+    // console.log("Button clicked for ID:", id);
     // Perform additional actions with the id value
     setViewModal(true);
     openModal();
@@ -141,7 +141,12 @@ const EmployeeDetails = () => {
         />
       )}
       {!viewModal && (
-        <FormModal closeModal={closeModal} isOpen={isOpen} header="Employee" />
+        <FormModal
+          closeModal={closeModal}
+          isOpen={isOpen}
+          header="Employee"
+          refetch={refetch}
+        />
       )}
     </UserLayout>
   );
