@@ -2,8 +2,8 @@
 import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { useForm } from "react-hook-form";
-// import { DevTool } from "@hookform/devtools";
 import useAuthContext from "../context/AuthContext";
+// import { DevTool } from "@hookform/devtools";
 
 const FormModal = ({ isOpen, closeModal, header, fromSale, refetch }) => {
   //   console.log("MOdal", isOpenF);

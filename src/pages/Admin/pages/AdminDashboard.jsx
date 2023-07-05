@@ -3,9 +3,24 @@ import Card from "../../../components/Card";
 import useAuthContext from "../../../context/AuthContext";
 import AdminLayout from "../../../layouts/AdminLayout";
 import NewCard from "../components/NewCard";
+import { useState } from "react";
+import EditModal from "../../../components/EditModal";
 
 const AdminDashboard = () => {
   const { http, admin, adminId, config } = useAuthContext();
+
+  let [isOpen, setIsOpen] = useState(false);
+  const [id, setId] = useState(null);
+  console.log(id);
+  function closeModal() {
+    setIsOpen(false);
+    setId(null);
+  }
+
+  function openModal(uId) {
+    setIsOpen(true);
+    setId(uId);
+  }
 
   const statsPerAdmin = useQuery({
     queryKey: ["statsPerAdmin"],
@@ -41,6 +56,9 @@ const AdminDashboard = () => {
               ) : (
                 statsPerAdmin.data.data.map((item) => (
                   <NewCard
+                    setId={setId}
+                    openModal={openModal}
+                    userId={item.user_id}
                     key={item.username}
                     username={item.username}
                     customerCount={item.customer_count}
@@ -95,6 +113,8 @@ const AdminDashboard = () => {
           )}
         </div>
       </div>
+
+      <EditModal id={id} isOpen={isOpen} closeModal={closeModal} />
     </AdminLayout>
   );
 };
