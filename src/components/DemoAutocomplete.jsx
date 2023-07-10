@@ -173,7 +173,7 @@ function AutocompleteSearchBox() {
 
   const loadOptions = async () => {
     // Make the API call to fetch the options from the backend
-    const response = await http.get(`/api/getservices`, config);
+    const response = await http.get(`/api/getservices/${userId}`, config);
     const data = await response.data.result;
     // console.log("Data", data);
 

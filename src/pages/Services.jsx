@@ -8,13 +8,13 @@ import UserLayout from "../layouts/UserLayout";
 import Table from "../components/Table";
 
 const Services = () => {
-  const { http, config } = useAuthContext();
+  const { http, config, userId } = useAuthContext();
 
   let [isOpen, setIsOpen] = useState(false);
 
   const { data, isLoading } = useQuery({
     queryKey: ["services"],
-    queryFn: async () => await http.get(`/api/getservices`, config),
+    queryFn: async () => await http.get(`/api/getservices/${userId}`, config),
   });
 
   function closeModal() {
