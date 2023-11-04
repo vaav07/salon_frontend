@@ -5,6 +5,7 @@ import AsyncSelect from "react-select/async";
 import Select from "react-select";
 import { useForm, Controller } from "react-hook-form";
 import FormModal from "./FormModal";
+import { useQuery } from "@tanstack/react-query";
 
 function AutocompleteSearchBox() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -33,7 +34,7 @@ function AutocompleteSearchBox() {
 
   const { http, config, userId, user, selectedResult, setSelectedResult } =
     useAuthContext();
-  let localUser = JSON.parse(user);
+  // let localUser = JSON.parse(user);
   // console.log("Selected Result", selectedResult);
   // console.log("Admin", localUser.admin_id);
 
@@ -171,21 +172,41 @@ function AutocompleteSearchBox() {
 
   // Define an async function to fetch the options from the backend
 
-  const loadOptions = async () => {
-    // Make the API call to fetch the options from the backend
-    const response = await http.get(`/api/getservices/${userId}`, config);
-    const data = await response.data.result;
-    // console.log("Data", data);
+  const { data, isLoading } = useQuery({
+    queryKey: ["get-all-services"],
+    queryFn: async () => {
+      try {
+        const response = await http.get(`/api/getservices/${userId}`, config);
 
-    // Transform the data to match the required format of React Select
-    const options = data.map((item) => ({
-      value: item.id,
-      label: item.service_name,
-      price: parseFloat(item.price),
-    }));
+        const data = response?.data?.result;
+        const options = data.map((item) => ({
+          value: item.id,
+          label: item.service_name,
+          price: parseFloat(item.price),
+        }));
 
-    return options;
-  };
+        return options;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+  });
+
+  // const loadOptions = async () => {
+  //   // Make the API call to fetch the options from the backend
+  //   const response = await http.get(`/api/getservices/${userId}`, config);
+  //   const data = await response.data.result;
+  //   // console.log("Data", data);
+
+  //   // Transform the data to match the required format of React Select
+  //   const options = data.map((item) => ({
+  //     value: item.id,
+  //     label: item.service_name,
+  //     price: parseFloat(item.price),
+  //   }));
+
+  //   return options;
+  // };
 
   const loadEmployee = async (inputValue) => {
     try {
@@ -219,6 +240,10 @@ function AutocompleteSearchBox() {
     setInvoice({});
     reset();
   };
+
+  if (isLoading) {
+    return <div>Loading....</div>;
+  }
 
   function renderInvoice() {
     if (!selectedResult || !formSubmitted) {
@@ -347,12 +372,12 @@ function AutocompleteSearchBox() {
                       control={control}
                       defaultValue={[]}
                       render={({ field }) => (
-                        <AsyncSelect
+                        <Select
                           {...field}
                           isMulti
                           cacheOptions
                           defaultOptions
-                          loadOptions={loadOptions}
+                          options={data}
                           className="w-2/3 border border-gray-400 rounded-lg"
                           onChange={(selectedOptions) => {
                             field.onChange(selectedOptions); // Update the value of the field object

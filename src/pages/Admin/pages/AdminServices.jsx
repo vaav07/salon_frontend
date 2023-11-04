@@ -2,7 +2,7 @@
 import { useMemo } from "react";
 import AdminLayout from "../../../layouts/AdminLayout";
 import useAuthContext from "../../../context/AuthContext";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import Table from "../../../components/Table";
 
 const AdminServices = () => {
@@ -12,10 +12,30 @@ const AdminServices = () => {
     return await http.get(`/api/admin/services/${adminId}`, config);
   };
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: ["allServices"],
     queryFn: getServices,
   });
+
+  const deleteServiceMU = useMutation({
+    mutationFn: async (serviceId) => {
+      return await http.delete(`/api/admin/${adminId}/services/${serviceId}`);
+    },
+
+    onError: (error) => {
+      // An error happened!
+      console.log(`rolling back optimistic update with id }`, error);
+    },
+    onSuccess: (res) => {
+      // Boom baby!
+      alert("successfully deleted");
+      refetch();
+    },
+  });
+
+  const handleDelete = (value) => {
+    deleteServiceMU.mutate(value);
+  };
 
   const columns = useMemo(
     () => [
@@ -36,6 +56,18 @@ const AdminServices = () => {
         Header: "Price",
         accessor: "price",
         Cell: ({ value }) => <p>₹ {parseInt(value)}</p>,
+      },
+      {
+        Header: "",
+        accessor: "id",
+        Cell: ({ value }) => (
+          <button
+            className="bg-red-600 hover:bg-red-700 text-white text-sm font-semibold py-1 px-2 rounded"
+            onClick={() => handleDelete(value)}
+          >
+            Delete
+          </button>
+        ),
       },
 
       // {
