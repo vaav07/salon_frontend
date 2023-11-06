@@ -6,6 +6,7 @@ import Select from "react-select";
 import { useForm, Controller } from "react-hook-form";
 import FormModal from "./FormModal";
 import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
 function AutocompleteSearchBox() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -108,6 +109,24 @@ function AutocompleteSearchBox() {
   // const currentDate = getCurrentDate();
   // const currentTime = getCurrentTime();
 
+  const indiaDate = useQuery({
+    queryKey: ["get-latest-date"],
+    queryFn: async () => {
+      try {
+        const response = await fetch("https://worldtimeapi.org/api/ip");
+        const data = await response.json();
+        if (data && data.datetime) {
+          return data?.datetime.slice(0, 10);
+        } else {
+          throw new Error("Unable to fetch current date from the server.");
+        }
+      } catch (error) {
+        console.error(error);
+        return new Date().toISOString().slice(0, 10);
+      }
+    },
+  });
+
   async function onSubmit(data) {
     // Submit the form data to your API
     // and handle the response as needed
@@ -131,7 +150,7 @@ function AutocompleteSearchBox() {
       total_price: totalPrice,
       // need to add
       payment_method: data.payment_method.value,
-      sale_date: getCurrentDate(),
+      sale_date: indiaDate.data,
       sale_time: getCurrentTime(),
 
       //just to show data on next page
