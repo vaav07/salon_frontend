@@ -33,12 +33,20 @@ function AutocompleteSearchBox() {
 
   const { control, handleSubmit, register, reset } = useForm();
 
-  const { http, config, userId, user, selectedResult, setSelectedResult } =
-    useAuthContext();
+  const {
+    http,
+    config,
+    userId,
+
+    user,
+    selectedResult,
+    setSelectedResult,
+  } = useAuthContext();
   // let localUser = JSON.parse(user);
   // console.log("Selected Result", selectedResult);
   // console.log("Admin", localUser.admin_id);
-
+  const adminID = JSON.parse(user);
+  // console.log("adminID", adminID?.admin_id);
   const paymentOptions = [
     { value: "upi", label: "UPI" },
     { value: "cash", label: "CASH" },
@@ -142,8 +150,8 @@ function AutocompleteSearchBox() {
     // "services": [1,2]
 
     const formattedData = {
-      admin_id: selectedResult.admin_id,
-      user_id: selectedResult.user_id,
+      admin_id: adminID?.admin_id,
+      user_id: userId,
       customer_id: selectedResult.id,
       employee_id: data.employee_id.value,
       services: data.selectedOptions.map((option) => option.value),
